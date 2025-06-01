@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Logo from "@public/images/logoL.svg"
+import React from "react";
 
-type ButtonProps = {
+type FooterButtonProps = {
   children: React.ReactNode;
 };
-const Button = ({children}:ButtonProps) => {
+const FooterButton = ({children}:FooterButtonProps) => {
   return (
     <button className="bg-white text-black p-[1.125rem]">
       {children}
@@ -22,9 +23,9 @@ export const Footer = () => {
         <li>대표이사 및 협회장 안지혼</li>
         <li>대표이사 및 협회장 안지혼</li>
         <div className="flex gap-11 items-center">
-          <Button>국세청</Button>
-          <Button>국민권익위원회</Button>
-          <Button>서울시교육청</Button>
+          <FooterButton>국세청</FooterButton>
+          <FooterButton>국민권익위원회</FooterButton>
+          <FooterButton>서울시교육청</FooterButton>
         </div>
         <ul className="flex gap-4 items-center">
           <li>NDIE</li>
