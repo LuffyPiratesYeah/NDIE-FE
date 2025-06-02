@@ -15,8 +15,6 @@ export default function HomeBanner() {
           <br />
           우리 모두가 서로가 다름을 인정하고 더욱 따뜻한 마음으로 서로를 보듬어줘야합니다.
         </p>
-
-        {/* English Translation */}
         <div className="mt-10 text-sm sm:text-base text-black">
           <p className="font-semibold">
             we must <span className="text-orange-500 font-bold">embrace</span>
