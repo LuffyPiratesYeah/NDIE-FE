@@ -1,7 +1,7 @@
 import React from "react";
 type ButtonVariant = 'primary' | 'outline';
 type ButtonProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   variant?: ButtonVariant;
 }
 export default function Button ({children, variant="primary"}:ButtonProps) {
