@@ -5,10 +5,10 @@ export default function HomeBanner() {
     <div className={`absolute top-1/2 -translate-y-1/2 z-1 bg-white/50 h-[40rem] left-[10rem] right-[10rem] 
                      rounded-4xl flex flex-col justify-center items-center text-center px-4 overflow-hidden`}>
       <div className="z-10">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-2">
-          우리는{" "}
-          <span className="text-orange-500 font-extrabold text-5xl sm:text-6xl align-middle">포용</span>{" "}
-          해야합니다
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-2 flex items-end justify-center gap-2">
+          <p className="mb-5 w-[10rem] text-center">우리는{" "}</p>
+          <span className="text-orange-500 font-extrabold text-[8rem] align-bottom">포용</span>{" "}
+          <p className="mb-5 w-[10rem] text-center">해야합니다</p>
         </h1>
         <p className="text-gray-700 mt-4">
           대한민국은 여러 불평등 문제로 점점 갈라져가고 있습니다.
