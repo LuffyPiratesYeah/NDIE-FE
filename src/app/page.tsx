@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div>
       <ContentContainer>
-        <Image src={Main} alt={"main"} className="absolute top-[-20px] z-0"/>
+        <Image src={Main} alt={"background"} className="absolute top-[-20px] z-0 left-0"/>
         <HomeBanner />
       </ContentContainer>
       <NoticeContainer />

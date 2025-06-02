@@ -6,7 +6,7 @@ type ContainerProps = {
 
 export default function ContentContainer({children}:ContainerProps) {
   return (
-    <div className="h-[50rem] w-full overflow-hidden relative bg-[#F8F8F8]">
+    <div className="h-[50rem] w-full overflow-hidden relative bg-[#F8F8F8] pl-40 pr-40">
       {children}
     </div>
   )
