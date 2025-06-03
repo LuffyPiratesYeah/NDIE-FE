@@ -120,7 +120,7 @@ export default function ContentInputScreen(
         onChange={(e)=>setTitle(e.target.value)}
         spellCheck="false"
       />
-      <div className="w-full flex justify-center border-y-[1.5px] border-[#838383]  select-none">
+      <div className="w-full overflow-scroll flex justify-center border-y-[1.5px] border-[#838383]  select-none">
         <div className="flex">
           <div
             className="p-2 text-[18px] text-[#838383] flex justify-center items-center w-[50px] hover:bg-[#f3f3f3] hover:text-black hover:cursor-pointer"

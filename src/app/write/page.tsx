@@ -14,7 +14,7 @@ export default function Write() {
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   return (
-    <div className=" flex items-center justify-center h-[90.5vh] w-full font-[family-name:var(--font-geist-sans)]">
+    <div className=" flex items-center justify-center h-[90.5vh] w-[100vw] font-[family-name:var(--font-geist-sans)]">
       <ContentInputScreen
         fileRef={fileRef}
         title={title}
