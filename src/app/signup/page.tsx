@@ -1,11 +1,13 @@
+"use client";
 import next from "next";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function signup() {
-
-
-
-
-
+  const router = useRouter();
+  const next = () => {
+    router.push("/signupagree");
+  }
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 space-y-6 px-4">
       <button className="relative flex w-full max-w-[980px] py-[19px] px-0 justify-center items-center bg-[#FF0] text-black rounded shadow-md">
@@ -18,13 +20,13 @@ export default function signup() {
       </button>
       <div className="flex items-center justify-center space-x-4 w-full max-w-[1300px]">
         <div className="w-[333px] h-[2px] bg-[#E2E1E1]" />
-        <a className="text-[18px] font-normal text-[#335CFF] font-['Inter'] whitespace-nowrap">
+        <Link href="/" className="text-[18px] font-normal text-[#335CFF] font-['Inter'] whitespace-nowrap">
           회원가입하는 방법 3초만에 알아보기
-        </a>
+        </Link>
         <div className="w-[333px] h-[2px] bg-[#E2E1E1]" />
       </div>
 
-      <button className="relative flex w-full max-w-[980px] py-[19px] px-0 justify-center items-center bg-white text-black rounded shadow-md">
+      <button onClick={next} className="relative flex w-full max-w-[980px] py-[19px] px-0 justify-center items-center bg-white text-black rounded shadow-md">
         ID/PW 회원가입
       </button>
       
