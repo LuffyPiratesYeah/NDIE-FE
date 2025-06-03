@@ -16,7 +16,7 @@ export const Header = () => {
       </div>
       <div className="flex gap-11 items-center">
         <Link href="/">로그인</Link>
-        <Link href="/">회원가입</Link>
+        <Link href="/signup">회원가입</Link>
       </div>
     </header>
   )
