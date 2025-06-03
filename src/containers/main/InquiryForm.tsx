@@ -38,27 +38,34 @@ export default function InquiryForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 여기에서 백엔드 API로 데이터를 전송하는 로직을 추가해야 합니다.
-    // React만으로는 직접 이메일을 보낼 수 없습니다.
-    // 예시: fetch('/api/send-inquiry', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(formData),
-    // });
+    try {
+      const response = await fetch('/api/send-inquiry', { // API 호출 경로는 동일
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    console.log('폼 데이터 전송 준비:', formData);
-    alert('문의가 접수되었습니다. (실제 전송은 백엔드 필요)');
+      const data = await response.json();
 
-    // 폼 초기화 (선택 사항)
-    setFormData({
-      name: '',
-      organization: '',
-      email: '',
-      selectedTag: '기타',
-      content: '',
-    });
+      if (response.ok) {
+        alert(data.message); // 성공 메시지 표시
+        // 폼 초기화
+        setFormData({
+          name: '',
+          organization: '',
+          email: '',
+          selectedTag: '기타',
+          content: '',
+        });
+      } else {
+        alert(`이메일 발송 실패: ${data.message}`); // 실패 메시지 표시
+      }
+    } catch (error) {
+      console.error('API 호출 중 오류 발생:', error);
+      alert('문의 전송 중 알 수 없는 오류가 발생했습니다.');
+    }
   };
 
   return (
