@@ -3,39 +3,39 @@ import React, {JSX} from "react";
 export default function makeDocument(text : string) {
   const tagPatterns = [
     {
-      pattern:  /<제목1>\n?([\s\S]*?)\n?<\/제목1>/,
-      component: (text : string) => <span className="text-[27px] font-bold">{text}</span>
-    },
-    {
-      pattern:  /<제목2>\n?([\s\S]*?)\n?<\/제목2>/,
-      component: (text : string) => <span className="text-[25px] font-semibold">{text}</span>
-    },
-    {
-      pattern:  /<제목3>\n?([\s\S]*?)\n?<\/제목3>/,
-      component: (text : string) => <span className="text-[20px] font-semibold">{text}</span>
-    },
-    {
-      pattern:  /<제목4>\n?([\s\S]*?)\n?<\/제목4>/,
+      pattern: /^####(.+)$/m,
       component: (text : string) => <span className="text-[17px] font-semibold">{text}</span>
     },
     {
-      pattern: /<강조>\n?([\s\S]*?)\n?<\/강조>/,
+      pattern: /^###(.+)$/m,
+      component: (text : string) => <span className="text-[20px] font-semibold">{text}</span>
+    },
+    {
+      pattern: /^##(.+)$/m,
+      component: (text : string) => <span className="text-[25px] font-semibold">{text}</span>
+    },
+    {
+      pattern: /^#(.+)$/m,
+      component: (text : string) => <span className="text-[27px] font-bold">{text}</span>
+    },
+    {
+      pattern: /\*\*(.*?)\*\*/,
       component: (text : string) => <strong>{text}</strong>
     },
     {
-      pattern: /<밑줄>(.*?)<\/밑줄>/,
+      pattern: /__(.*?)__/,
       component: (text : string) => <span className="underline">{text}</span>
     },
     {
-      pattern:  /<기울임>\n?([\s\S]*?)\n?<\/기울임>/,
+      pattern:  /\*(.*?)\*/,
       component: (text : string) => <i>{text}</i>,
     },
     {
-      pattern:  /<취소선>\n?([\s\S]*?)\n?<\/취소선>/,
+      pattern:  /~~(.*?)~~/,
       component: (text : string) => <span className="line-through">{text}</span>,
     },
     {
-      pattern:/<줄>(.*?)<\/줄>/,
+      pattern:/---(.*?)/,
       component: () => <div className="w-full h-[2px] bg-gray-500 my-1"></div>
     },
     {
