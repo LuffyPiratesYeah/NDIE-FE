@@ -1,103 +1,42 @@
+import React from "react";
 import Image from "next/image";
+import Main from "@public/images/mainback.svg";
+import A from "@public/images/a.svg";
+import B from "@public/images/b.svg";
+import ContentContainer from "@/containers/main/ContentContainer";
+import NoticeContainer from "@/containers/main/NoticeContainer";
+import HomeBanner from "@/containers/main/HomeBanner";
+import TimeLine from "@/containers/main/TimeLine";
+import OrgChart from "@/containers/main/OrgChart";
+import InquiryForm from "@/containers/main/InquiryForm";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div>
+      <ContentContainer>
+        <Image src={Main} alt={"background"} className="absolute top-[-20px] z-0 left-0"/>
+        <HomeBanner />
+      </ContentContainer>
+      <NoticeContainer />
+      <ContentContainer className="py-20 flex gap-4 flex-col">
+        <p className="text-[2rem] font-extrabold mb-4"><span className="text-[#FF961F]">협회</span> 소개</p>
+        <Image src={A} alt="a" />
+        <p className="text-center font-semibold text-2xl">사단법인 디지털과포용성네트워크는 <br/>
+          모든 사회 구성원이 디지털 환경 속에서 소외되지 않고 함께 성장할 수 있는 포용적 디지털 사회를 지향합니다.<br/>
+          우리는 다양성 존중, 디지털 접근성 향상, 사회적 장벽 해소를 핵심 가치로 삼고 있으며,<br/>
+          이를 실현하기 위해 <br/>
+          교육 프로그램 개발, 정책 연구, 전문가 네트워킹, 인식 개선 활동 등을 활발히 수행하고 있습니다.</p>
+        <Image src={B} alt="b" className="ml-auto"/>
+      </ContentContainer>
+      <ContentContainer>
+        <OrgChart/>
+      </ContentContainer>
+      <ContentContainer>
+        <TimeLine />
+      </ContentContainer>
+      <ContentContainer>
+        <InquiryForm />
+      </ContentContainer>
     </div>
   );
 }
