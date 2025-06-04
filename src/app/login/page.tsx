@@ -74,7 +74,7 @@ export default function Login() {
 
         <button
           onClick={handleLogin}
-          className="cursor-pointer w-full bg-orange-400 text-white font-bold py-2 rounded mt-4"
+          className="hover:bg-[#f78000] cursor-pointer w-full bg-orange-400 text-white font-bold py-2 rounded mt-4"
         >
           로그인
         </button>

@@ -26,7 +26,7 @@ export default function signup() {
         <div className="w-[333px] h-[2px] bg-[#E2E1E1]" />
       </div>
 
-      <button onClick={next} className="cursor-pointer  relative flex w-full max-w-[980px] py-[19px] px-0 justify-center items-center bg-white text-black rounded shadow-md">
+      <button onClick={next} className="hover:bg-[#ededed] cursor-pointer  relative flex w-full max-w-[980px] py-[19px] px-0 justify-center items-center bg-white text-black rounded shadow-md">
         ID/PW 회원가입
       </button>
       

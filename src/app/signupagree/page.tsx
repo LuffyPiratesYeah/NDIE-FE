@@ -83,11 +83,11 @@ export default function signupagree() {
       </div>
 
       <div className="flex justify-center mt-12 space-x-4">
-        <button className="cursor-pointer px-6 py-2 rounded border">취소</button>
+        <button onClick={()=> router.push('/signup')} className="cursor-pointer px-6 py-2 rounded border">취소</button>
         <button
           disabled={!(terms && privacy)}
           onClick={handleSignup} 
-          className={` px-6 py-2 rounded text-white cursor-pointer  ${
+          className={` hover:bg-[#f78000] px-6 py-2 rounded text-white cursor-pointer  ${
             terms && privacy ? 'bg-[#FF8200]' : 'bg-gray-300 cursor-not-allowed'
           }`}
         >

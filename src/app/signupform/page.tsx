@@ -76,7 +76,7 @@ export default function SignupForm() {
           password,
           rePassword: repassword,
           gender,
-          birthDate: `${year}-${month}-${day}`,
+          birthDate: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
           activityArea: location,
           
         }),
@@ -89,7 +89,6 @@ export default function SignupForm() {
       alert('회원가입 중 오류가 발생했습니다.');
     }
   };
-console.log(API_BASE);
   return (
     
     <div className="max-w-md mx-auto py-10 px-4">
@@ -166,7 +165,7 @@ console.log(API_BASE);
 
         <button
           onClick={handleSubmit}
-          className="cursor-pointer w-full bg-[#F28C28] text-white py-3 rounded mt-6"
+          className="hover:bg-[#f78000] cursor-pointer w-full bg-[#F28C28] text-white py-3 rounded mt-6"
         >
           가입하기
         </button>
