@@ -3,11 +3,16 @@ import Image from "next/image";
 import Plus from "@/assets/write/plus.svg";
 import React from "react";
 import {useModalStore} from "@/store/modal";
+import {CreateActivity} from "@/app/api/activity";
 
 export default function WriteModalScreen({
   fileRef,
+  title,
+  content
 }: {
   fileRef: React.RefObject<HTMLInputElement | null>;
+  title : string,
+  content : string
                                          }) {
   const {isModalOpen, toggleModal} = useModalStore();
   return(
@@ -30,6 +35,7 @@ export default function WriteModalScreen({
           취소
         </button>
         <button
+          onClick={()=>CreateActivity({title : title, content : content, image : ""})}
           className={" bg-[#ED9735] text-white font-bold cursor-pointer h-[2.5rem] w-[6.5rem] rounded-[0.625rem] border-2 border-[#ED9735] text-sm flex justify-center items-center"}
         >
           등록하기

@@ -1,5 +1,7 @@
 import React from "react";
 import {useModalStore} from "@/store/modal";
+import {CreateQA} from "@/app/api/q&a";
+import {CreateAnnouncement} from "@/app/api/announcement";
 
 export default function WriteFooter({
   title,
@@ -19,7 +21,8 @@ export default function WriteFooter({
     if(!content) return alert("내용을 입력해주세요")
     if(selectedOption === "") return alert("카테고리를 선택해주세요")
     if(selectedOption === "활동") toggleModal();
-    else alert("게시함")
+    else if(selectedOption === "공지사항") CreateAnnouncement({title, content});
+    else if(selectedOption === "Q&A") CreateQA({title, content});
   }}
   className={" bg-[#ED9735] text-white font-bold cursor-pointer h-[2.5rem] w-[6.5rem] rounded-[0.625rem] border-2 border-[#ED9735] text-sm flex justify-center items-center"}
     >

@@ -25,7 +25,7 @@ export default function Write() {
         selectedOption={selectedOption}
       />
       <ContentOutputScreen title={title} content={content}  />
-      <WriteFooter title={title} content={content} selectedOption={selectedOption} />
+      <WriteFooter  title={title} content={content} selectedOption={selectedOption} />
       <FileInput fileRef={fileRef} />
       <WriteModalScreen fileRef={fileRef} />
 
