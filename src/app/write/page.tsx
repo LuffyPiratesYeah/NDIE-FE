@@ -6,15 +6,18 @@ import ContentOutputScreen from "@/containers/write/ContentOutputScreen";
 import WriteFooter from "@/containers/write/WriteFooter";
 import WriteModalScreen from "@/containers/write/ModalScreen";
 import FileInput from "@/containers/write/FileInput";
+import Loading from "@/components/ui/loading";
+import {useLoadingStore} from "@/store/loading";
 
 export default function Write() {
   const [title,setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const fileRef = useRef<HTMLInputElement | null>(null);
-
+  const {isLoading} = useLoadingStore();
   return (
     <div className=" flex items-center justify-center h-[90.5vh] w-[100vw] font-[family-name:var(--font-geist-sans)]">
+      {isLoading && <Loading />}
       <ContentInputScreen
         fileRef={fileRef}
         title={title}

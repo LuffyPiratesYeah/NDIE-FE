@@ -5,7 +5,7 @@ import axios, {
   AxiosError,
 } from 'axios';
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://ndie-be-985895714915.europe-west1.run.app/',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
