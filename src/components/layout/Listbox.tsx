@@ -57,8 +57,7 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
             className="bg-[#ED9735] w-[8vh] h-[3.5vh] rounded-[1vh] text-white"
             onClick={handleSearch}
           >
-            검색
-          </button>
+            검색</button>
         </div>
       </div>
 
