@@ -38,7 +38,7 @@ export default function signupagree() {
           <input
             type="checkbox"
             checked={terms}
-            className="w-4 h-4" 
+            className="w-4 h-4 cursor-pointer " 
             onChange={() => setTerms(!terms)}
           />
           <div className="flex-1">
@@ -53,7 +53,7 @@ export default function signupagree() {
         <label className="flex items-start space-x-3">
           <input
             type="checkbox"
-            className="w-4 h-4" 
+            className="w-4 h-4 cursor-pointer " 
             checked={privacy}
             onChange={() => setPrivacy(!privacy)}
           />
@@ -70,7 +70,7 @@ export default function signupagree() {
           <input
             type="checkbox"
             checked={marketing}
-            className="w-4 h-4" 
+            className="w-4 h-4 cursor-pointer " 
             onChange={() => setMarketing(!marketing)}
           />
           <div className="flex-1">
@@ -83,11 +83,11 @@ export default function signupagree() {
       </div>
 
       <div className="flex justify-center mt-12 space-x-4">
-        <button className="px-6 py-2 rounded border">취소</button>
+        <button className="cursor-pointer px-6 py-2 rounded border">취소</button>
         <button
           disabled={!(terms && privacy)}
           onClick={handleSignup} 
-          className={`px-6 py-2 rounded text-white ${
+          className={` px-6 py-2 rounded text-white cursor-pointer  ${
             terms && privacy ? 'bg-[#FF8200]' : 'bg-gray-300 cursor-not-allowed'
           }`}
         >

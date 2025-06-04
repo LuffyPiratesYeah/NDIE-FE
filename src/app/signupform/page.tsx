@@ -5,12 +5,23 @@ import { useState, useEffect } from 'react';
 
 export default function SignupForm() {
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const router = useRouter();
-  
   const [year, setYear] = useState<number>(1999);
   const [month, setMonth] = useState<number>(1);
   const [day, setDay] = useState<number>(1);
   const [daysInMonth, setDaysInMonth] = useState<number[]>([]);
+  const API_BASE = process.env.API_BASE;
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [repassword, setRePassword] = useState('');
+  const [gender, setGender] = useState('');
+  const [location, setLocation] = useState('');
+
+  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [code, setCode] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+
+  const router = useRouter();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -21,99 +32,144 @@ export default function SignupForm() {
 
   const generateYears = () => {
     const currentYear = new Date().getFullYear();
-    const years = [];
-    for (let y = currentYear; y >= 1920; y--) {
-      years.push(y);
-    }
-    return years;
+    return Array.from({ length: currentYear - 1919 }, (_, i) => currentYear - i);
   };
 
   const generateMonths = () => Array.from({ length: 12 }, (_, i) => i + 1);
 
   const updateDaysInMonth = (year: number, month: number) => {
     const lastDay = new Date(year, month, 0).getDate();
-    const days = Array.from({ length: lastDay }, (_, i) => i + 1);
-    setDaysInMonth(days);
+    setDaysInMonth(Array.from({ length: lastDay }, (_, i) => i + 1));
   };
 
   useEffect(() => {
     updateDaysInMonth(year, month);
   }, [year, month]);
 
+  const handleSendVerificationEmail = async () => {
+    try {
+      const res = await fetch(`${API_BASE}email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      }); 
+      
+      if (!res.ok) throw new Error('인증 요청 실패');
+      alert('인증 메일이 전송되었습니다.');
+      setIsEmailSent(true);
+    } catch (err) {
+      alert('이메일 인증 요청 실패');
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (password !== repassword) return alert('비밀번호가 일치하지 않습니다.');
+
+    try {
+      const res = await fetch(`${API_BASE}signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          code,
+          password,
+          rePassword: repassword,
+          gender,
+          birthDate: `${year}-${month}-${day}`,
+          activityArea: location,
+          
+        }),
+      });
+
+      if (!res.ok) throw new Error('회원가입 실패');
+      alert('회원가입 성공!');
+      router.push('/');
+    } catch (err) {
+      alert('회원가입 중 오류가 발생했습니다.');
+    }
+  };
+console.log(API_BASE);
   return (
+    
     <div className="max-w-md mx-auto py-10 px-4">
-      <div className="flex justify-center mb-6 relative">
-        <label className="cursor-pointer">
-          <img
-            src={profileImage || '/default-profile.png'}
-            alt=""
-            className="w-24 h-24 rounded-full object-cover"
-          />
-          <div className="absolute bottom-0 right-[35%] bg-white rounded-full p-1 shadow">
-            <img src="/fix.svg" alt="수정 아이콘" className="w-5 h-5" />
-          </div>
-          <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
-        </label>
-      </div>
+
 
       <div className="space-y-4">
-        <input type="email" placeholder="이메일" className="w-full border px-4 py-2" />
-        <input type="password" placeholder="비밀번호" className="w-full border px-4 py-2" />
-        <input type="password" placeholder="비밀번호 확인" className="w-full border px-4 py-2" />
-        <input type="text" placeholder="이름을 입력해주세요" className="w-full border px-4 py-2" />
+        <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="이름을 입력해주세요" className="w-full border px-4 py-2" />
+
+        <div className="flex">
+          <input
+            type="email"
+            placeholder="이메일"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="flex-1 border px-4 py-2 rounded-l"
+            disabled={isEmailVerified}
+          />
+          <button
+            onClick={handleSendVerificationEmail}
+            disabled={isEmailSent || !email}
+            className="hover-pointer bg-[#F28C28] text-white px-4 rounded-r"
+          >
+            {isEmailSent ? '전송됨' : '인증 요청'}
+          </button>
+        </div>
+
+        {isEmailSent && !isEmailVerified && (
+          <div className="flex space-x-2 mt-2">
+            <input
+              type="text"
+              placeholder="인증번호 입력"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              className="flex-1 border px-4 py-2"
+            />
+          </div>
+        )}
+
+        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="비밀번호" className="w-full border px-4 py-2" />
+        <input value={repassword} onChange={(e) => setRePassword(e.target.value)} type="password" placeholder="비밀번호 확인" className="w-full border px-4 py-2" />
 
         <div>
           <div className="font-medium mb-1">성별</div>
           <label className="mr-4">
-            <input type="radio" name="gender" className="mr-1" /> 남성
+            <input type="radio" name="gender" className="mr-1" value="남성" onChange={(e) => setGender(e.target.value)} /> 남성
           </label>
           <label>
-            <input type="radio" name="gender" className="mr-1" /> 여성
+            <input type="radio" name="gender" className="mr-1" value="여성" onChange={(e) => setGender(e.target.value)} /> 여성
           </label>
         </div>
 
         <div>
           <div className="font-medium mb-1">생년월일</div>
           <div className="flex space-x-2">
-            <select
-              value={year}
-              onChange={(e) => setYear(Number(e.target.value))}
-              className="border px-2 py-1"
-            >
+            <select value={year} onChange={(e) => setYear(Number(e.target.value))} className="border px-2 py-1">
               {generateYears().map((y) => (
-                <option key={y} value={y}>
-                  {y}년
-                </option>
+                <option key={y} value={y}>{y}년</option>
               ))}
             </select>
-            <select
-              value={month}
-              onChange={(e) => setMonth(Number(e.target.value))}
-              className="border px-2 py-1"
-            >
+            <select value={month} onChange={(e) => setMonth(Number(e.target.value))} className="border px-2 py-1">
               {generateMonths().map((m) => (
-                <option key={m} value={m}>
-                  {m}월
-                </option>
+                <option key={m} value={m}>{m}월</option>
               ))}
             </select>
-            <select
-              value={day}
-              onChange={(e) => setDay(Number(e.target.value))}
-              className="border px-2 py-1"
-            >
+            <select value={day} onChange={(e) => setDay(Number(e.target.value))} className="border px-2 py-1">
               {daysInMonth.map((d) => (
-                <option key={d} value={d}>
-                  {d}일
-                </option>
+                <option key={d} value={d}>{d}일</option>
               ))}
             </select>
           </div>
         </div>
 
-        <input type="text" placeholder="활동지역을 입력해주세요" className="w-full border px-4 py-2" />
+        <input value={location} onChange={(e) => setLocation(e.target.value)} type="text" placeholder="활동지역을 입력해주세요" className="w-full border px-4 py-2" />
 
-        <button onClick={() => router.push('/')} className="w-full bg-[#F28C28] text-white py-3 rounded mt-6">가입하기</button>
+        <button
+          onClick={handleSubmit}
+          className="cursor-pointer w-full bg-[#F28C28] text-white py-3 rounded mt-6"
+        >
+          가입하기
+        </button>
       </div>
     </div>
   );
