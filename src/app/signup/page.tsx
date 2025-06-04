@@ -1,0 +1,35 @@
+"use client";
+import next from "next";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+export default function signup() {
+  const router = useRouter();
+  const next = () => {
+    router.push("/signupagree");
+  }
+  return (
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 space-y-6 px-4">
+      <button className="relative flex w-full max-w-[980px] py-[19px] px-0 justify-center items-center bg-[#FF0] text-black rounded shadow-md">
+        <img
+          className="absolute left-3 w-[43px] h-[43px]"
+          alt="Kakao Icon"
+          src="/TALK.svg"
+        />
+        카카오톡으로 시작하기
+      </button>
+      <div className="flex items-center justify-center space-x-4 w-full max-w-[1300px]">
+        <div className="w-[333px] h-[2px] bg-[#E2E1E1]" />
+        <Link href="/" className="text-[18px] font-normal text-[#335CFF] font-['Inter'] whitespace-nowrap">
+          회원가입하는 방법 3초만에 알아보기
+        </Link>
+        <div className="w-[333px] h-[2px] bg-[#E2E1E1]" />
+      </div>
+
+      <button onClick={next} className="relative flex w-full max-w-[980px] py-[19px] px-0 justify-center items-center bg-white text-black rounded shadow-md">
+        ID/PW 회원가입
+      </button>
+      
+    </div>
+  );
+}

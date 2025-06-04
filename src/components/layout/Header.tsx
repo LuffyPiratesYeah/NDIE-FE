@@ -3,7 +3,7 @@ import Image from "next/image";
 import Logo from "@public/images/logo.svg";
 export const Header = () => {
   return (
-    <header className="h-[4.6875rem] sticky top-0 left-0 right-0 border-b-[#585858] border-b-[0.4px] pl-40 pr-40 flex justify-between items-center">
+    <header className="h-[4.6875rem] sticky top-0 left-0 right-0 border-b-[#585858] border-b-[0.4px] pl-40 pr-40 flex justify-between items-center z-50 bg-white">
       <div className="flex gap-20 items-center">
         <div className="flex gap-4 items-center">
           <Image src={Logo} alt={"Logo"} />
@@ -17,7 +17,7 @@ export const Header = () => {
       </div>
       <div className="flex gap-11 items-center">
         <Link href="/">로그인</Link>
-        <Link href="/">회원가입</Link>
+        <Link href="/signup">회원가입</Link>
       </div>
     </header>
   )
