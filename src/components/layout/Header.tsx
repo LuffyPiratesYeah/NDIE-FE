@@ -13,6 +13,7 @@ export const Header = () => {
         <Link href="/act">활동</Link>
         <Link href="/qna">QnA</Link>
         <Link href="/announcement">공지사항</Link>
+        <Link href="/write">게시물 작성</Link>
       </div>
       <div className="flex gap-11 items-center">
         <Link href="/">로그인</Link>

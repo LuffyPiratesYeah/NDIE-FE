@@ -20,7 +20,7 @@ export default function signup() {
       </button>
       <div className="flex items-center justify-center space-x-4 w-full max-w-[1300px]">
         <div className="w-[333px] h-[2px] bg-[#E2E1E1]" />
-        <Link href="/" className="text-[18px] font-normal text-[#335CFF] font-['Inter'] whitespace-nowrap">
+        <Link href="/public" className="text-[18px] font-normal text-[#335CFF] font-['Inter'] whitespace-nowrap">
           회원가입하는 방법 3초만에 알아보기
         </Link>
         <div className="w-[333px] h-[2px] bg-[#E2E1E1]" />
