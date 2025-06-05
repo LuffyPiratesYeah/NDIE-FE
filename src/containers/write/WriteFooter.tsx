@@ -22,7 +22,15 @@ export default function WriteFooter({
     if(!content) return alert("내용을 입력해주세요")
     if(selectedOption === "") return alert("카테고리를 선택해주세요")
     if(selectedOption === "활동") toggleModal();
-    else if(selectedOption === "공지사항") CreateAnnouncement({title, content});
+    else if(selectedOption === "공지사항"){
+      setIsLoading();
+      const status = await CreateAnnouncement({title, content});
+      console.log(status)
+      if(status === 200){
+        setIsLoading();
+        router.push("/announcement");
+      }
+    }
     else if(selectedOption === "Q&A") {
       setIsLoading();
       const status = await CreateQA({title, content});
