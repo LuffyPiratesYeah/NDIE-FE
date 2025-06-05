@@ -10,7 +10,7 @@ import UnderlineGray from "@/assets/write/underlineGray.svg";
 import UnderLine from "@/assets/write/underline.svg";
 import ImgGray from "@/assets/write/imgGraymini.svg";
 import Img from "@/assets/write/img.svg";
-import React, {RefObject, useRef, useState} from "react";
+import React, {RefObject, useState} from "react";
 
 export default function ContentInputScreen(
   {title,
@@ -19,7 +19,9 @@ export default function ContentInputScreen(
     setContent,
     setSelectedOption,
     setTitle,
-    fileRef
+    fileRef,
+    addText,
+    contentRef
   }:
   {title : string,
     content : string,
@@ -28,10 +30,10 @@ export default function ContentInputScreen(
     setSelectedOption : React.Dispatch<React.SetStateAction<string>>,
     setTitle : React.Dispatch<React.SetStateAction<string>>,
     fileRef: RefObject<HTMLInputElement | null>;
+    addText : (text : string, index : number) => void,
+    contentRef : RefObject<HTMLTextAreaElement | null>
   }
 ) {
-
-  const contentRef = useRef<HTMLTextAreaElement>(null);
 
   const handleDown = (e : React.KeyboardEvent)=>{
     if(e.key === 'Tab'){
@@ -75,20 +77,7 @@ export default function ContentInputScreen(
     }
     setContent(updatedValue);
   }
-  const addText = (num: string, position : number)=>{
-    if(content.length > 0) setContent((prevText) =>prevText + "\n" + num);
-    else setContent((prevText) =>prevText + num);
-    setTimeout(()=>{
-      if(content.length){
-        contentRef.current?.focus();
-        contentRef.current?.setSelectionRange(position, position);
-      }
-      else{
-        contentRef.current?.focus();
-        contentRef.current?.setSelectionRange(position-1, position-1);
-      }
-    }, 0)
-  }
+
 
   const [bold, setBold] = useState(true);
   const [italic, setItalic] = useState(true);

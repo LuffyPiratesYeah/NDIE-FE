@@ -13,7 +13,7 @@ export default function WriteModalScreen({
   fileRef: React.RefObject<HTMLInputElement | null>;
   title : string,
   content : string
-                                         }) {
+}) {
   const {isModalOpen, toggleModal} = useModalStore();
   return(
     <Modal toggleModal={toggleModal} isOpen={isModalOpen}>

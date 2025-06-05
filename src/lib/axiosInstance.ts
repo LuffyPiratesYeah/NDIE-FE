@@ -5,7 +5,7 @@ import axios, {
   AxiosError,
 } from 'axios';
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE,
   headers: {
     'Content-Type': 'application/json',
   },
