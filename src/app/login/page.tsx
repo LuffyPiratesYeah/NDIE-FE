@@ -3,12 +3,16 @@ import Logo from "@public/images/logo.svg";
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/useAuthStore";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
   const API_BASE = process.env.API_BASE;
+  const setToken = useAuthStore((state) => state.setToken);
+
 
   const handleLogin = async () => {
   try {
@@ -17,13 +21,14 @@ export default function Login() {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({ email, password }),
     });
-
+    const authHeader = res.headers.get('Authorization');
     const text = await res.text(); 
     let data;
 
-    try {
+    try { 
       data = JSON.parse(text); 
     } catch {
       data = null; 
@@ -34,8 +39,13 @@ export default function Login() {
       throw new Error(errorMessage);
     }
 
-    if (data?.token) {
+    if (authHeader) {
+      const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
+      localStorage.setItem('token', token);
+      setToken(token);
+    } else if (data?.token) {
       localStorage.setItem('token', data.token);
+      setToken(data.token);
     }
 
     alert('로그인 성공');
