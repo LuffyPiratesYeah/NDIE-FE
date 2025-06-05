@@ -164,7 +164,7 @@ export default function InquiryForm() {
                 placeholder="문의할 내용을 입력해주세요"
                 rows={10}
                 // 텍스트 영역 스타일 변경: 테두리만, 배경 투명, 패딩 조정
-                className="w-full p-4 border border-gray-300 rounded-md bg-transparent text-xl text-gray-700 placeholder-gray-400 focus:outline-none resize-y"
+                className="w-full p-4 border border-gray-300 rounded-md bg-transparent text-xl text-gray-700 placeholder-gray-400 focus:outline-none resize-none"
                 required
               ></textarea>
             </div>
