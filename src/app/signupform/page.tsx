@@ -48,7 +48,7 @@ export default function SignupForm() {
 
   const handleSendVerificationEmail = async () => {
     try {
-      const res = await fetch(`${API_BASE}email`, {
+      const res = await fetch(`${API_BASE}/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -66,7 +66,7 @@ export default function SignupForm() {
     if (password !== repassword) return alert('비밀번호가 일치하지 않습니다.');
 
     try {
-      const res = await fetch(`${API_BASE}signup`, {
+      const res = await fetch(`${API_BASE}/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

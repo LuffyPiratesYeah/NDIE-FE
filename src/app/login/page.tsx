@@ -11,33 +11,41 @@ export default function Login() {
   const API_BASE = process.env.API_BASE;
 
   const handleLogin = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const text = await res.text(); 
+    let data;
+
     try {
-      const res = await fetch(`${API_BASE}login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || '로그인 실패');
-      }
-
-      const data = await res.json();
-
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-      }
-
-      alert('로그인 성공');
-      router.push('/');
-    } catch (error) {
-      console.error('Login Error:', error);
-      alert(error.message || '로그인 중 오류 발생');
+      data = JSON.parse(text); 
+    } catch {
+      data = null; 
     }
-  };
+
+    if (!res.ok) {
+      const errorMessage = data?.message || '로그인 실패';
+      throw new Error(errorMessage);
+    }
+
+    if (data?.token) {
+      localStorage.setItem('token', data.token);
+    }
+
+    alert('로그인 성공');
+    router.push('/');
+  } catch (error) {
+    console.error('Login Error:', error);
+    alert(error.message || '로그인 중 오류 발생');
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
