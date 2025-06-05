@@ -34,7 +34,6 @@ export default function Write() {
   }
   return (
     <div className=" flex items-center justify-center h-[90.5vh] w-[100vw] font-[family-name:var(--font-geist-sans)]">
-      {isLoading && <Loading />}
       <ContentInputScreen
         fileRef={fileRef}
         title={title}
@@ -49,9 +48,8 @@ export default function Write() {
       <ContentOutputScreen title={title} content={content}  />
       <WriteFooter  title={title} content={content} selectedOption={selectedOption} />
       <FileInput addText={addText} content={content} fileRef={fileRef} />
-      <WriteModalScreen fileRef={fileRef} />
-
-
+      <WriteModalScreen title={title} content={content} />
+      {isLoading && <Loading />}
     </div>
   );
 }

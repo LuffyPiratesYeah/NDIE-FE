@@ -2,7 +2,7 @@ import axiosInstance from "@/lib/axiosInstance";
 
 export const CreateActivity = async (data: { title: string, content: string , image: string}) => {
   const res = await axiosInstance.post('/activity', data);
-  return res.data;
+  return res.status;
 };
 
 export const uploadImg = async (data: FormData) => {
