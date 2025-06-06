@@ -1,9 +1,14 @@
 import React from "react";
+import {uploadImg} from "@/app/api/activity";
 
 export default function FileInput({
   fileRef,
+  content,
+  addText
 }: {
   fileRef: React.RefObject<HTMLInputElement | null>;
+  content : string
+  addText : (num : string, position : number)=>void
                                   }){
   const addImgText = async (img : File) =>{
     if(!fileRef.current) return;
@@ -14,13 +19,13 @@ export default function FileInput({
     }
     const data = new FormData();
     data.append('file', img);
-    console.log(data)
-    // const src = await uploadImg(data);
-    // if(src){
-    //   addText(`<이미지 src="${src.url}"></이미지>`, content.length);
-    // }else{
-    //   alert("img 등록에 실패")
-    // }
+
+    const src = await uploadImg(data);
+    if(src){
+      addText(`<이미지 src="${src.url}"></이미지>`, content.length);
+    }else{
+      alert("img 등록에 실패")
+    }
   }
 
   return (
