@@ -17,7 +17,7 @@ export default function WriteModalScreen({
   const {isModalOpen, toggleModal} = useModalStore();
   const [img, setImg] = React.useState("");
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const {setIsLoading} = useLoadingStore();
+  const {setIsLoadingFalse, setIsLoadingTrue} = useLoadingStore();
   const changeFile = async (event) => {
     const allowedImageTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (!allowedImageTypes.includes(event.target.files[0].type)) {
@@ -32,20 +32,20 @@ export default function WriteModalScreen({
       const res = await uploadImg(data);
       if(res){
         setImg(res.url);
-        setIsLoading()
+        setIsLoadingFalse()
       }
     }
-    setIsLoading()
+    setIsLoadingTrue()
     await upload()
   };
 
   const router = useRouter();
   const handleSubmit = async () => {
-    setIsLoading();
+    setIsLoadingTrue();
     const status = await CreateActivity({title, content, image: img});
     if(status === 200){
       toggleModal();
-      setIsLoading();
+      setIsLoadingFalse();
       router.push("/activity");
     }
   };

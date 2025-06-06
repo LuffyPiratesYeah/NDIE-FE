@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import React, { useState ,useEffect } from 'react'; 
-import Listbox from '../layout/listbox';
+import Listbox from '../layout/Listbox';
 
 type ListProps = {
     name: string;
