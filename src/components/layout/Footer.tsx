@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Logo from "@public/images/logoL.svg"
+import Logo from "@public/images/logo.svg"
 import React from "react";
 
 type FooterButtonProps = {
