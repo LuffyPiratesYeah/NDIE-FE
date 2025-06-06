@@ -10,7 +10,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const API_BASE = process.env.API_BASE;
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+  const KAKAO_BASE = process.env.NEXT_PUBLIC_KAKAO_BASE;
   const setToken = useAuthStore((state) => state.setToken);
 
 
@@ -63,7 +64,7 @@ export default function Login() {
         </div>
 
         <button className="relative flex cursor-pointer justify-center items-center w-full bg-[#FF0] text-black font-bold py-2 rounded" onClick={()=>{
-          window.location.href ="https://ndie-be-985895714915.europe-west1.run.app/oauth2/authorization/kakao"
+          window.location.href =`${KAKAO_BASE}`
         }}>
           <img className="absolute left-3 w-[30px] h-[30px]" alt="Kakao Icon" src="/TALK.svg" />
           카카오톡으로 시작하기

@@ -8,7 +8,7 @@ export default function LoginSuccess() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setToken = useAuthStore((state) => state.setToken);
-  const API_BASE = process.env.API_BASE;
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
   useEffect(() => {
     const code = searchParams.get('code');
 
