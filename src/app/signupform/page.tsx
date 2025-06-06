@@ -9,7 +9,7 @@ export default function SignupForm() {
   const [month, setMonth] = useState<number>(1);
   const [day, setDay] = useState<number>(1);
   const [daysInMonth, setDaysInMonth] = useState<number[]>([]);
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+  const API_BASE = process.env.API_BASE;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

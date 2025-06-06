@@ -10,7 +10,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+  const API_BASE = process.env.API_BASE;
   const setToken = useAuthStore((state) => state.setToken);
 
 

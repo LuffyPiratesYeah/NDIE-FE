@@ -8,7 +8,7 @@ export default function LoginSuccess() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setToken = useAuthStore((state) => state.setToken);
-
+  const API_BASE = process.env.API_BASE;
   useEffect(() => {
     const code = searchParams.get('code');
 
@@ -20,7 +20,7 @@ export default function LoginSuccess() {
     const verifyLogin = async () => {
       try {
         const res = await fetch(
-          `https://ndie-be-985895714915.europe-west1.run.app/codeLogin`,
+          `${API_BASE}/codeLogin`,
           {
             method: 'POST',
             headers: {
