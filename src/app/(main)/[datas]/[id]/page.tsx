@@ -1,9 +1,10 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import Loading from '@/components/ui/loading'; 
 
 
 type IndexType = {
@@ -12,6 +13,7 @@ type IndexType = {
   nextId: number;
   nextTitle: string;
 };
+import makeDocument from "@/util/makeDocument";
 
 export default function DetailPage() {
   const params = useParams();
@@ -19,6 +21,7 @@ export default function DetailPage() {
 
   const [item, setItem] = useState<any>(null);
   const [indexs, setIndexs] = useState<IndexType | null>(null);
+  
 
 
   useEffect(() => {
@@ -50,7 +53,7 @@ export default function DetailPage() {
 
   if (!item) return (
     <div className="flex justify-center items-center min-h-[95vh]">
-    <p className='text-[3vh]'>Loading...</p>
+    <Loading />
   </div>
 
   ); 
@@ -59,7 +62,7 @@ export default function DetailPage() {
   return (
     <div className=" flex flex-col gap-[3vh] items-center relative mt-[3vh] h-[90vh]">
     <div className="w-[80%] flex flex-col gap-[3vh]">
-      <p className="text-[3vh]">{name}</p>
+      <p className="text-[3vh]"><Link href={`/${datas}`}>{name} </Link></p>
       <hr className="border-[#CCCCCC] border-[1px] rounded-[5px]" />
     </div>
 
@@ -83,7 +86,11 @@ export default function DetailPage() {
       <p className='text-sm text-gray-500 mb-6'>{item.createdAt}</p>
 
       <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
-      <p className="whitespace-pre-wrap">{item.content}</p>
+      <div
+        className="w-full max-w-full break-all p-[10px_14px] text-base flex flex-wrap h-full overflow-y-scroll mb-5 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
+      >
+        {makeDocument(item.content)}
+      </div>
     
     </div>
   </div>
@@ -97,7 +104,11 @@ export default function DetailPage() {
     <p className='text-sm text-gray-500 mb-4'>{item.createdAt}</p>
     <div className='flex flex-col gap-[20vh]'>
     <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
-    <p className="whitespace-pre-wrap">{item.content}</p>
+      <div
+        className="w-full max-w-full break-all p-[10px_14px] text-base flex flex-wrap h-full overflow-y-scroll mb-5 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
+      >
+        {makeDocument(item.content)}
+      </div>
     <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mt-6" />
     </div>
   </div>

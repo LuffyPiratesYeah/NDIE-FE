@@ -14,22 +14,26 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredItems, setFilteredItems] = useState(item);
+  const [hasSearched, setHasSearched] = useState(false); // 🔸 추가
 
   const handleSearch = () => {
+    setHasSearched(true); 
     const filtered = item.filter((i) =>
       i.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredItems(filtered);
   };
+
   useEffect(() => {
     if (searchTerm.trim() === '') {
       setFilteredItems(item); 
+      setHasSearched(false); 
     }
   }, [searchTerm, item]);
-  
-  
+
   const deslist = (id: number) => {
     sessionStorage.setItem('name', name);
+    axios.get(`https://ndie-be-985895714915.europe-west1.run.app/document/up/${id}`);
     axios
       .get(`https://ndie-be-985895714915.europe-west1.run.app/${datas}/${id}`)
       .then(() => {
@@ -57,7 +61,8 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
             className="bg-[#ED9735] w-[8vh] h-[3.5vh] rounded-[1vh] text-white"
             onClick={handleSearch}
           >
-            검색</button>
+            검색
+          </button>
         </div>
       </div>
 
@@ -84,9 +89,9 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
             <p>{i.views}</p>
           </div>
         ))
-      ) : (
+      ) : hasSearched ? (
         <div className="text-center py-4 text-gray-500">검색 결과가 없습니다.</div>
-      )}
+      ) : null}
     </div>
   );
 }
