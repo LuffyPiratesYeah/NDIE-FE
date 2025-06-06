@@ -1,8 +1,9 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import makeDocument from "@/util/makeDocument";
 
 export default function DetailPage() {
   const params = useParams();
@@ -54,7 +55,11 @@ export default function DetailPage() {
       <p className='text-sm text-gray-500 mb-6'>{item.createdAt}</p>
 
       <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
-      <p className="whitespace-pre-wrap">{item.content}</p>
+      <div
+        className="w-full max-w-full break-all p-[10px_14px] text-base flex flex-wrap h-full overflow-y-scroll mb-5 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
+      >
+        {makeDocument(item.content)}
+      </div>
     
     </div>
   </div>
@@ -66,9 +71,13 @@ export default function DetailPage() {
   <div className='flex flex-col w-full'>
     <h1 className='text-2xl font-bold mb-2'>{name === 'QnA' ? 'Q. ' : ''}{item.title}</h1>
     <p className='text-sm text-gray-500 mb-4'>{item.createdAt}</p>
-    <div className='flex flex-col gap-[20vh]'>
+    <div className='flex flex-col'>
     <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
-    <p className="whitespace-pre-wrap">{item.content}</p>
+      <div
+        className="w-full max-w-full break-all p-[10px_14px] text-base flex flex-wrap h-full overflow-y-scroll mb-5 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
+      >
+        {makeDocument(item.content)}
+      </div>
     <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mt-6" />
     </div>
   </div>
