@@ -51,7 +51,7 @@ export default function Login() {
 
     router.push('/');
   } catch (error) {
-    alert(error.message || '로그인 중 오류 발생');
+    alert(error || '로그인 중 오류 발생');
   }
 };
 
