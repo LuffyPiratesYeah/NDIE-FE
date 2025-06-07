@@ -62,7 +62,7 @@ export default function SignupForm() {
       alert('인증 메일이 전송되었습니다.');
       setIsEmailSent(true);
     } catch (err) {
-      alert('이메일 인증 요청 실패');
+      alert(err);
     }
   };
 

@@ -84,10 +84,10 @@ export default function DetailPage() {
   
   const params = useParams();
   const { datas, id } = params as { datas: string; id: string };
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [item, setItem] = useState<any>(null);
   const [indexs, setIndexs] = useState<IndexType | null>(null);
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [click,isclick] = useState<any>(null);
   
 
