@@ -1,34 +1,18 @@
 'use client'
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
+import { getAnnouncement } from "@/service/announcement";
 
 type Notice = {
   title: string;
-  date: string;
+  createdAt: string;
   content: string;
 };
 
-const dummyNotices: Notice[] = [
-  {
-    title: "엔디엔디엔디엔디",
-    date: "25.05.07",
-    content: "엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디엔디",
-  },
-  {
-    title: "두번째 공지입니다",
-    date: "25.05.08",
-    content: "두번째 공지 내용이 여기에 들어갑니다. 길어질 수도 있어요. 테스트 테스트 테스트",
-  },
-  {
-    title: "세 번째 공지!",
-    date: "25.05.09",
-    content: "이건 세 번째 공지입니다. 간단하지만 중요한 내용을 담고 있습니다.",
-  },
-];
-
 export default function NoticeContainer() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentNotice = dummyNotices[currentIndex];
-
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const currentNotice = notices[currentIndex];
   const baseStyle = "w-[7.5rem] flex items-center justify-center text-gray-500";
 
   const handlePrev = () => {
@@ -36,8 +20,35 @@ export default function NoticeContainer() {
   };
 
   const handleNext = () => {
-    if (currentIndex < dummyNotices.length - 1) setCurrentIndex((prev) => prev + 1);
+    setCurrentIndex((prev) =>
+      prev < notices.length - 1 ? prev + 1 : 0
+    );
   };
+
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const data = await getAnnouncement();
+        setNotices(data);
+      } catch (error) {
+        console.error("공지사항 불러오기 실패:", error);
+      }
+    };
+    fetchNotices();
+  }, [getAnnouncement, setNotices]);
+
+  // 5초마다 자동 슬라이드
+  useEffect(() => {
+    if (notices.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex < notices.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 5000);
+
+    return () => clearInterval(interval); // 언마운트 시 정리
+  }, [notices]);
 
   return (
     <div className="h-[11.25rem] w-full flex border-t border-b border-[#EAEAEA] bg-white">
@@ -52,18 +63,20 @@ export default function NoticeContainer() {
         <p className="text-sm text-gray-400 mb-1">공지사항</p>
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-lg font-semibold text-black truncate max-w-[80%]">
-            {currentNotice.title}
+            {currentNotice?.title}
           </h3>
-          <span className="text-xs text-gray-400">{currentNotice.date}</span>
+          <span className="text-xs text-gray-400">
+            {currentNotice?.createdAt.slice(0, 10).replaceAll("-", ".")}
+          </span>
         </div>
         <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
-          {currentNotice.content}
+          {currentNotice?.content}
         </p>
       </div>
       <button
         className={`${baseStyle} border-l border-[#EAEAEA] text-2xl disabled:text-gray-300`}
         onClick={handleNext}
-        disabled={currentIndex === dummyNotices.length - 1}
+        disabled={currentIndex === notices.length - 1}
       >
         ▶
       </button>
