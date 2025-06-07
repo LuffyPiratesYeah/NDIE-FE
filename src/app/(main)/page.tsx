@@ -7,7 +7,7 @@ import B from "@public/images/b.svg";
 import ContentContainer from "@/containers/main/ContentContainer";
 import NoticeContainer from "@/containers/main/NoticeContainer";
 import HomeBanner from "@/containers/main/HomeBanner";
-import TimeLine from "@/containers/main/TimeLine";
+// import TimeLine from "@/containers/main/TimeLine";
 // import OrgChart from "@/containers/main/OrgChart";
 import InquiryForm from "@/containers/main/InquiryForm";
 
@@ -32,9 +32,9 @@ export default function Home() {
       {/*<ContentContainer>*/}
       {/*  <OrgChart/>*/}
       {/*</ContentContainer>*/}
-      <ContentContainer>
-        <TimeLine />
-      </ContentContainer>
+      {/*<ContentContainer>*/}
+      {/*  <TimeLine />*/}
+      {/*</ContentContainer>*/}
       <ContentContainer>
         <InquiryForm />
       </ContentContainer>
