@@ -1,9 +1,7 @@
 "use client";
-import next from "next";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function signup() {
+export default function Signup() {
   const router = useRouter();
   const KAKAO_BASE = process.env.NEXT_PUBLIC_KAKAO_BASE;
   const next = () => {

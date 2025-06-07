@@ -3,7 +3,6 @@
 import axios from 'axios';
 import React, { useState ,useEffect } from 'react'; 
 import Listbox from '../layout/Listbox';
-import Link from 'next/link';
 
 type ListProps = {
     name: string;

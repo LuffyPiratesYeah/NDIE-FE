@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
 import Loading from '@/components/ui/loading'; 
