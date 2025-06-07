@@ -3,7 +3,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE,
+  baseURL: "/",
   headers: {
     'Content-Type': 'application/json',
   },
