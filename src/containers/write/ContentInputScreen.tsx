@@ -86,14 +86,35 @@ export default function ContentInputScreen(
   const [img, setImg] = useState(true);
 
 
+  const isAdmin = parseJwt(localStorage.getItem("token") ?? "");
+  function parseJwt(token: string): boolean | null {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+          .join('')
+      );
 
+      const data = JSON.parse(jsonPayload);
+      if (data) {
+        return data.role === "ROLE_ADMIN";
+      }
+      return null;
+    } catch (e) {
+      console.error('Invalid token', e);
+      return null;
+    }
+  }
   return (
     <div className="w-full h-full gap-4 bg-[#ffffff] flex justify-center flex-col pl-15 pr-15 pt-10 pb-10 items-center">
       <section className={"w-full flex items-center justify-start"}>
         <div className={"relative w-32 border border-[#5A5A5A] rounded-[0.325rem]"}>
           <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)} className={"text-[#5A5A5A] appearance-none w-full pl-4 py-1  outline-none"}>
             <option disabled hidden value={""}>카테고리</option>
-            <option value={"공지사항"}>공지사항</option>
+            {isAdmin && <option value={"공지사항"}>공지사항</option>}
             <option value={"Q&A"}>Q&A</option>
             <option value={"활동"}>활동</option>
           </select>
