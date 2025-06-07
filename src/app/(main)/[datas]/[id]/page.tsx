@@ -186,7 +186,7 @@ export default function DetailPage() {
       <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
       <div className='flex flex-col gap-[40vh]'>
         <div
-          className="w-full max-w-full break-all p-[10px_14px] text-base flex flex-wrap h-full overflow-y-scroll mb-[-20vh] scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
+          className="w-full max-w-full break-all p-[10px_14px] text-base flex flex-wrap h-full"
         >
           {makeDocument(item.content)}
         </div>
