@@ -34,17 +34,20 @@ export default function Write() {
   }
   return (
     <div className=" flex items-center justify-center h-[90.5vh] w-[100vw] font-[family-name:var(--font-geist-sans)]">
-      <ContentInputScreen
-        fileRef={fileRef}
-        title={title}
-        setTitle={setTitle}
-        setContent={setContent}
-        setSelectedOption={setSelectedOption}
-        content={content}
-        selectedOption={selectedOption}
-        addText={addText}
-        contentRef={contentRef}
-      />
+      <Suspense fallback={<Loading/>}>
+        <ContentInputScreen
+          fileRef={fileRef}
+          title={title}
+          setTitle={setTitle}
+          setContent={setContent}
+          setSelectedOption={setSelectedOption}
+          content={content}
+          selectedOption={selectedOption}
+          addText={addText}
+          contentRef={contentRef}
+        />
+      </Suspense>
+
       <ContentOutputScreen title={title} content={content}  />
       <WriteFooter  title={title} content={content} selectedOption={selectedOption} />
       <FileInput addText={addText} content={content} fileRef={fileRef} />
