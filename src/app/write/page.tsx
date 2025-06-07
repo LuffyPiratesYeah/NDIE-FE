@@ -1,5 +1,5 @@
-'use client';
-
+"use client";
+import { Suspense } from 'react';
 import React, {useRef, useState} from "react";
 import ContentInputScreen from "@/containers/write/ContentInputScreen";
 import ContentOutputScreen from "@/containers/write/ContentOutputScreen";
@@ -48,7 +48,9 @@ export default function Write() {
       <ContentOutputScreen title={title} content={content}  />
       <WriteFooter  title={title} content={content} selectedOption={selectedOption} />
       <FileInput addText={addText} content={content} fileRef={fileRef} />
-      <WriteModalScreen title={title} content={content} />
+      <Suspense fallback={<Loading/>}>
+        <WriteModalScreen title={title} content={content} />
+      </Suspense>
       {isLoading && <Loading />}
     </div>
   );
