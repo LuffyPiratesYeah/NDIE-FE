@@ -3,7 +3,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "/",
+  baseURL: 'https://ndie-be-985895714915.europe-west1.run.app',
   headers: {
     'Content-Type': 'application/json',
   },
