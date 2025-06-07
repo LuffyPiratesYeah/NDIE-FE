@@ -8,7 +8,7 @@ import ContentContainer from "@/containers/main/ContentContainer";
 import NoticeContainer from "@/containers/main/NoticeContainer";
 import HomeBanner from "@/containers/main/HomeBanner";
 import TimeLine from "@/containers/main/TimeLine";
-import OrgChart from "@/containers/main/OrgChart";
+// import OrgChart from "@/containers/main/OrgChart";
 import InquiryForm from "@/containers/main/InquiryForm";
 
 export default function Home() {
@@ -29,9 +29,9 @@ export default function Home() {
           교육 프로그램 개발, 정책 연구, 전문가 네트워킹, 인식 개선 활동 등을 활발히 수행하고 있습니다.</p>
         <Image src={B} alt="b" className="ml-auto"/>
       </ContentContainer>
-      <ContentContainer>
-        <OrgChart/>
-      </ContentContainer>
+      {/*<ContentContainer>*/}
+      {/*  <OrgChart/>*/}
+      {/*</ContentContainer>*/}
       <ContentContainer>
         <TimeLine />
       </ContentContainer>
