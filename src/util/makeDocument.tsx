@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, {JSX} from "react";
+import React from "react";
 export default function makeDocument(text : string) {
   const tagPatterns = [
     {
@@ -40,10 +40,10 @@ export default function makeDocument(text : string) {
     },
     {
       pattern:/<이미지 src="(.*?)"><\/이미지>/,
-      component : (src  : string) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      component : (src : any) => {
         if(!src) return null;
         // src[1]가 src 주소임 (match 결과는 [전체, 첫번째 캡처 그룹])
-        console.log(src[0]?.props?.children)
         return <div className="relative w-full h-[300px]"> {/* 원하는 높이 설정 */}
           <Image
             className="object-cover block mx-auto"
@@ -58,9 +58,10 @@ export default function makeDocument(text : string) {
 
   function parseText(inputText : string) : React.ReactNode {
     if (!inputText) return null;
-
-    let earliestMatch: RegExpMatchArray | null = null;
-    let matchComponent: ((children: React.ReactNode) => JSX.Element) | null = null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let earliestMatch: any | null = null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let matchComponent:any= null;
 
     tagPatterns.forEach(({ pattern, component }) => {
       const match = inputText.match(pattern);
