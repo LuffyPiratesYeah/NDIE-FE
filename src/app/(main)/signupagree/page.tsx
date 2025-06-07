@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'; 
-export default function signupagree() {
+export default function Signupagree() {
   const [agreeAll, setAgreeAll] = useState(false);
   const [terms, setTerms] = useState(false);
   const [privacy, setPrivacy] = useState(false);
