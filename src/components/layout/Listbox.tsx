@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Loading from '@/components/ui/loading'; 
 
 type ListboxProps = {
   item: { id: number; title: string; username: string; views: number; createdAt: string }[];
@@ -91,7 +92,7 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
         ))
       ) : hasSearched ? (
         <div className="text-center py-4 text-gray-500">검색 결과가 없습니다.</div>
-      ) : null}
+      ) : <Loading />}
     </div>
   );
 }

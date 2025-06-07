@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function SignupForm() {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -9,7 +10,7 @@ export default function SignupForm() {
   const [month, setMonth] = useState<number>(1);
   const [day, setDay] = useState<number>(1);
   const [daysInMonth, setDaysInMonth] = useState<number[]>([]);
-  const API_BASE = process.env.API_BASE;
+  const NEXT_PUBLIC_API_BASE = process.env.NEXT_PUBLIC_API_BASE;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,7 +49,8 @@ export default function SignupForm() {
 
   const handleSendVerificationEmail = async () => {
     try {
-      const res = await fetch(`${API_BASE}/email`, {
+      console.log(email)
+      const res = await fetch(`${NEXT_PUBLIC_API_BASE}/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -66,26 +68,37 @@ export default function SignupForm() {
     if (password !== repassword) return alert('비밀번호가 일치하지 않습니다.');
 
     try {
-      const res = await fetch(`${API_BASE}/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          code,
-          password,
-          rePassword: repassword,
-          gender,
-          birthDate: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
-          activityArea: location,
-          
-        }),
+      const birthDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      
+      const res = await axios.post(`${NEXT_PUBLIC_API_BASE}/signup`, {
+        name,
+        email,
+        code,
+        password,
+        rePassword: repassword,
+        gender,
+        birthDate,
+        activityArea: location,
       });
 
-      if (!res.ok) throw new Error('회원가입 실패');
+      
+    
       alert('회원가입 성공!');
       router.push('/');
     } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.log('회원가입 오류:', err.response?.data || err.message);
+      }
+      console.log({
+        name,
+        email,
+        code,
+        password,
+        rePassword: repassword,
+        gender,
+        birthDate: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+        activityArea: location,
+      });
       alert('회원가입 중 오류가 발생했습니다.');
     }
   };

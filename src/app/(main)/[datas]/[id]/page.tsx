@@ -13,22 +13,75 @@ type IndexType = {
   nextId: number;
   nextTitle: string;
 };
+
+type CommentType = {
+  comment : string;
+};
+
 import makeDocument from "@/util/makeDocument";
 
 
 
 export default function DetailPage() {
   const [commentText, setCommentText] = useState('');
+  const [token, setToken] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+  const [comments, setcomments] = useState<CommentType | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+  
+    if (storedToken) {
+      axios.post(
+        `https://ndie-be-985895714915.europe-west1.run.app/user`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${storedToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        setRole(response.data.authorities[0].authority);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    }
+  }, []);
+  
+  
 
 
-  function comment( commentText : string ){
-    console.log(commentText, id)
+  function comment(commentText: string) {
+    if (!token) {
+      console.error("토큰이 없습니다.");
+      return;
+    }
+    console.log(commentText, id);
+
     axios.post(`https://ndie-be-985895714915.europe-west1.run.app/QNA/comment`,{
       titleId : id,
       content : commentText
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    }
+    )
+    .then((response) => {
+      console.log(response.data)
+      axios.get(`https://ndie-be-985895714915.europe-west1.run.app/QNA/comment/${id}`)
+      .then((res) => {
+        setcomments(res.data);
+      })
     })
   }
-
+  
   const params = useParams();
   const { datas, id } = params as { datas: string; id: string };
 
@@ -61,6 +114,17 @@ export default function DetailPage() {
         })
         .catch((error) => {
           console.error(error);
+        });
+
+        axios.get(
+          `https://ndie-be-985895714915.europe-west1.run.app/QNA/comment/${id}`,
+        )
+        .then((response) => {
+          setcomments(response.data);
+          console.log(response)
+        })
+        .catch((err) => {
+          console.error(err);
         });
 
     }
@@ -125,46 +189,56 @@ export default function DetailPage() {
         >
           {makeDocument(item.content)}
         </div>
-        <div >
-            {name === 'QnA' ? (
-        <div className="border rounded-xl p-4 mt-[-10vh] flex flex-col gap-[-10vh]">
-        {click ? (
-          <div>
-                  <textarea
-                  className="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none"
-                  placeholder="답변을 입력하세요."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                />
-                <div className='flex justify-end'>
-                <button className="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-md flex items-center gap-2 transition " onClick={() => comment(commentText)}>
-                  댓글 올리기
-                </button>
-                </div>
-          </div>
-        ) : (
-          <div className='flex justify-center'>
-            <button className="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-md flex items-center gap-2 transition m-[5vh]" onClick={() => isclick(!click)}>
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
-        viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-5-9l5 5M13 7l6 6" />
-      </svg>
-      답변 작성
-    </button>
-          </div>
-        )}
-
-      
-        <div className="flex justify-end">
-        </div>
-      </div>
-      
-      ):(
         <div>
-
+        {(name === 'QnA') && (comments?.comment || role === 'ROLE_ADMIN') && (
+  <div className="border rounded-xl border-[#EAEAEA] p-4 -mt-[10vh] flex flex-col">
+    {comments?.comment ? (
+      <div className="p-2 flex flex-row gap-[2vh]">
+        <div className='bg-[#FFD19C] w-[6vh] h-[6vh] rounded-[3vh] flex justify-center items-center '>
+          <div className='bg-[#FF961F] w-[6vh] h-[6vh] rounded-[10vh] flex justify-center items-center'>
+            <p className='text-[2vh] text-[#FFFFFF]'>A</p>
+          </div>
         </div>
-      )}
+        {comments.comment}
+        </div>
+    ) : click ? (
+      <div>
+        <textarea
+          className="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none"
+          placeholder="답변을 입력하세요."
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+        />
+        <div className="flex justify-end">
+          <button
+            className="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-md flex items-center gap-2 transition"
+            onClick={() => comment(commentText)}
+          >
+            댓글 올리기
+          </button>
+        </div>
       </div>
+    ) : (
+      <div className="flex justify-center">
+        <button
+          className="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-md flex items-center gap-2 transition m-[5vh]"
+          onClick={() => isclick(!click)}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-5-9l5 5M13 7l6 6" />
+          </svg>
+          답변 작성
+        </button>
+      </div>
+    )}
+  </div>
+)}
+
+</div>
+
+
+
       <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mt-[-35vh]" />
     </div>
     
