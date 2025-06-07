@@ -51,7 +51,7 @@ export default function NoticeContainer() {
         }
       });
       setIsAnimating(false);
-    }, 300); // 애니메이션 시간과 일치
+    }, 300);
   };
 
   return (
