@@ -22,7 +22,7 @@ export default function Login() {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include', // 쿠키 받아오기
+      credentials: 'include',
       body: JSON.stringify({ email, password }),
     });
     const authHeader = res.headers.get('Authorization');
@@ -102,8 +102,11 @@ export default function Login() {
 
         <div className="flex justify-between items-center text-sm text-gray-600 mt-2">
           <label className="flex items-center">
+            <input type="checkbox" className="cursor-pointer mr-2" />
+            로그인 상태 유지
           </label>
           <div className="space-x-3">
+            <button className="hover:underline cursor-pointer">비밀번호 재설정</button>
             <button onClick={() => router.push('/signup')} className="hover:underline cursor-pointer">
               회원가입
             </button>

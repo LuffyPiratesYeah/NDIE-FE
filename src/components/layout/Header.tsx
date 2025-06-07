@@ -28,9 +28,10 @@ export const Header = () => {
           <p className="text-2xl">NDIE</p>
         </div>
         <Link href="/">홈</Link>
-        <Link href="/">활동</Link>
-        <Link href="/">QnA</Link>
-        <Link href="/">공지사항</Link>
+        <Link href="/act">활동</Link>
+        <Link href="/qna">QnA</Link>
+        <Link href="/announcement">공지사항</Link>
+        {token && <Link href="/write">게시물 작성</Link>}
       </div>
       <div className="flex gap-11 items-center">
         {token ? (
