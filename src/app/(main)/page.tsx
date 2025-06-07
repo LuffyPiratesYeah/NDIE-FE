@@ -9,7 +9,7 @@ import NoticeContainer from "@/containers/main/NoticeContainer";
 import HomeBanner from "@/containers/main/HomeBanner";
 // import TimeLine from "@/containers/main/TimeLine";
 // import OrgChart from "@/containers/main/OrgChart";
-import InquiryForm from "@/containers/main/InquiryForm";
+// import InquiryForm from "@/containers/main/InquiryForm";
 
 export default function Home() {
   return (
@@ -35,9 +35,9 @@ export default function Home() {
       {/*<ContentContainer>*/}
       {/*  <TimeLine />*/}
       {/*</ContentContainer>*/}
-      <ContentContainer>
-        <InquiryForm />
-      </ContentContainer>
+      {/*<ContentContainer>*/}
+      {/*  <InquiryForm />*/}
+      {/*</ContentContainer>*/}
     </div>
   );
 }
