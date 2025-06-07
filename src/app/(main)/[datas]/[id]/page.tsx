@@ -89,8 +89,6 @@ export default function DetailPage() {
   const [indexs, setIndexs] = useState<IndexType | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [click,isclick] = useState<any>(null);
-  
-
 
   useEffect(() => {
     if (datas && id) {
@@ -141,7 +139,10 @@ export default function DetailPage() {
   return (
   <div className=" flex flex-col gap-[2vh] items-center relative mt-[3vh] mb-[3vh] h-auto">
     <div className="w-[80%] flex flex-col gap-[3vh]">
-      <p className="text-[3vh]"><Link href={`/${datas}`}>{name} </Link></p>
+      <p className="text-[3vh]"><Link href={`/${datas === "QNA" ? "qna" : datas === "activity" ? "act" : datas}`}>
+  {name}
+</Link>
+</p>
       <hr className="border-[#CCCCCC] border-[1px] rounded-[5px]" />
     </div>
 
