@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import ArrowBottom from "@/assets/write/arrow-bottom.svg";
 import BoldGray from "@/assets/write/boldGray.svg";
