@@ -51,6 +51,11 @@ export default function DetailPage() {
       });
     }
   }, []);
+
+  function formatDate(dateStr: string) {
+    const [year, month, day] = dateStr.split('T')[0].split('-');
+    return `${parseInt(year)}년 ${parseInt(month)}월 ${parseInt(day)}일`;
+  }
   
   
 
@@ -163,7 +168,7 @@ export default function DetailPage() {
 
       <div className="flex flex-col w-[80vh]">
         <h1 className='text-2xl font-bold mb-2'>{item.title}</h1>
-        <p className='text-sm text-gray-500 mb-6'>{item.createdAt}</p>
+        <p className='text-sm text-gray-500 mb-6'>{formatDate(item.createdAt)}</p>
 
         <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
         <div
@@ -181,7 +186,7 @@ export default function DetailPage() {
 
     <div className='flex flex-col w-full'>
       <h1 className='text-2xl font-bold mb-2'>{name === 'QnA' ? 'Q. ' : ''}{item.title}</h1>
-      <p className='text-sm text-gray-500 mb-4'>{item.createdAt}</p>
+      <p className='text-sm text-gray-500 mb-4'>{formatDate(item.createdAt)}</p>
       <div className='flex flex-col gap-[20vh]'>
       <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
       <div className='flex flex-col gap-[40vh]'>

@@ -25,6 +25,13 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
     setFilteredItems(filtered);
   };
 
+  function formatDate(dateStr: string) {
+    const [year, month, day] = dateStr.split('T')[0].split('-');
+    return `${parseInt(year)}년 ${parseInt(month)}월 ${parseInt(day)}일`;
+  }
+
+
+
   useEffect(() => {
     if (searchTerm.trim() === '') {
       setFilteredItems(item); 
@@ -86,7 +93,7 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
             <p>{i.id}</p>
             <p className="truncate">{i.title}</p>
             <p>{i.username}</p>
-            <p>{i.createdAt}</p>
+            <p>{formatDate(i.createdAt)}</p>
             <p>{i.views}</p>
           </div>
         ))
