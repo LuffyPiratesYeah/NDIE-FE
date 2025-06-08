@@ -10,8 +10,10 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-  const KAKAO_BASE = process.env.NEXT_PUBLIC_KAKAO_BASE;
+  // const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+  const API_BASE = "https://ndie-be-985895714915.europe-west1.run.app";
+  // const KAKAO_BASE = process.env.NEXT_PUBLIC_KAKAO_BASE;
+  const KAKAO_BASE = "https://ndie-be-985895714915.europe-west1.run.app/oauth2/authorization/kakao"
   const setToken = useAuthStore((state) => state.setToken);
 
 
