@@ -14,21 +14,17 @@ const FooterButton = ({children}:FooterButtonProps) => {
 }
 export const Footer = () => {
   return (
-    <footer className="h-[36.25rem] w-full bg-[#001246] pl-40 pr-40 flex justify-between text-white items-center">
+    <footer className="h-[36.25rem] w-full bg-[#001246] pl-40 pr-40 flex justify-between text-white items-center text-sm">
       <ul className="flex gap-4 flex-col">
-        <li>대표이사 및 협회장 안지혼</li>
-        <li>대표이사 및 협회장 안지혼</li>
-        <li>대표이사 및 협회장 안지혼</li>
-        <li>대표이사 및 협회장 안지혼</li>
-        <li>대표이사 및 협회장 안지혼</li>
-        <li>대표이사 및 협회장 안지혼</li>
+        <li>부산광역시 동래구 온천천로471번가길 40</li>
+        <li>대표이사 이성철</li>
+        <li>사무총장 박영민</li>
         <div className="flex gap-11 items-center">
           <FooterButton>국세청</FooterButton>
           <FooterButton>국민권익위원회</FooterButton>
           <FooterButton>서울시교육청</FooterButton>
         </div>
         <ul className="flex gap-4 items-center">
-          <li>NDIE</li>
           <li>연구</li>
           <li>교육</li>
           <li>소통</li>
@@ -39,8 +35,9 @@ export const Footer = () => {
           <li>개인정보처리방침</li>
         </ul>
         <li>NDIE 디지털과 포용성 네트워크</li>
+        <li>NDIE Network for Digital Inclusion and Empowerment</li>
       </ul>
-      <Image src={Logo} alt={"Logo"} />
+      <Image src={Logo} alt={"Logo"} className="h-full w-1/5" />
     </footer>
   )
 }

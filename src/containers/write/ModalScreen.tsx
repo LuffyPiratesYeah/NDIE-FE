@@ -18,7 +18,10 @@ export default function WriteModalScreen({
   const [img, setImg] = React.useState("");
   const fileRef = useRef<HTMLInputElement | null>(null);
   const {setIsLoadingFalse, setIsLoadingTrue} = useLoadingStore();
-  const changeFile = async (event) => {
+  const changeFile = async (event : React.ChangeEvent<HTMLInputElement> ) => {
+    if (!event.target.files) {
+      return;
+    }
     const allowedImageTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (!allowedImageTypes.includes(event.target.files[0].type)) {
       alert("이미지 파일만 업로드할 수 있습니다. (jpg, png, jpeg)");

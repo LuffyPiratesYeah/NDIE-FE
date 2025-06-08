@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function SignupForm() {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  // const [profileImage, setProfileImage] = useState<string | null>(null);
   const [year, setYear] = useState<number>(1999);
   const [month, setMonth] = useState<number>(1);
   const [day, setDay] = useState<number>(1);
@@ -22,16 +22,16 @@ export default function SignupForm() {
 
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [code, setCode] = useState('');
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  // const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   const router = useRouter();
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setProfileImage(URL.createObjectURL(file));
-    }
-  };
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setProfileImage(URL.createObjectURL(file));
+  //   }
+  // };
 
   const generateYears = () => {
     const currentYear = new Date().getFullYear();
@@ -62,7 +62,7 @@ export default function SignupForm() {
       alert('인증 메일이 전송되었습니다.');
       setIsEmailSent(true);
     } catch (err) {
-      alert('이메일 인증 요청 실패');
+      alert(err);
     }
   };
 
@@ -83,10 +83,10 @@ export default function SignupForm() {
         activityArea: location,
       });
 
-      
-    
-      alert('회원가입 성공!');
-      router.push('/');
+      if(res.status !== 200) {
+        alert('회원가입 성공!');
+        router.push('/');
+      }
     } catch (err) {
       if (axios.isAxiosError(err)) {
 
@@ -110,7 +110,7 @@ export default function SignupForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="flex-1 border px-4 py-2 rounded-l"
-            disabled={isEmailVerified}
+            disabled={false}
           />
           <button
             onClick={handleSendVerificationEmail}
@@ -121,7 +121,8 @@ export default function SignupForm() {
           </button>
         </div>
 
-        {isEmailSent && !isEmailVerified && (
+        {/*{isEmailSent && !isEmailVerified && (*/}
+        {isEmailSent && (
           <div className="flex space-x-2 mt-2">
             <input
               type="text"

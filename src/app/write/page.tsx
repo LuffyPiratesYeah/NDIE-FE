@@ -1,5 +1,5 @@
-'use client';
-
+"use client";
+import { Suspense } from 'react';
 import React, {useRef, useState} from "react";
 import ContentInputScreen from "@/containers/write/ContentInputScreen";
 import ContentOutputScreen from "@/containers/write/ContentOutputScreen";
@@ -34,21 +34,26 @@ export default function Write() {
   }
   return (
     <div className=" flex items-center justify-center h-[90.5vh] w-[100vw] font-[family-name:var(--font-geist-sans)]">
-      <ContentInputScreen
-        fileRef={fileRef}
-        title={title}
-        setTitle={setTitle}
-        setContent={setContent}
-        setSelectedOption={setSelectedOption}
-        content={content}
-        selectedOption={selectedOption}
-        addText={addText}
-        contentRef={contentRef}
-      />
+      <Suspense fallback={<Loading/>}>
+        <ContentInputScreen
+          fileRef={fileRef}
+          title={title}
+          setTitle={setTitle}
+          setContent={setContent}
+          setSelectedOption={setSelectedOption}
+          content={content}
+          selectedOption={selectedOption}
+          addText={addText}
+          contentRef={contentRef}
+        />
+      </Suspense>
+
       <ContentOutputScreen title={title} content={content}  />
       <WriteFooter  title={title} content={content} selectedOption={selectedOption} />
       <FileInput addText={addText} content={content} fileRef={fileRef} />
-      <WriteModalScreen title={title} content={content} />
+      <Suspense fallback={<Loading/>}>
+        <WriteModalScreen title={title} content={content} />
+      </Suspense>
       {isLoading && <Loading />}
     </div>
   );

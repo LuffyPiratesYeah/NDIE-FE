@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import ArrowBottom from "@/assets/write/arrow-bottom.svg";
 import BoldGray from "@/assets/write/boldGray.svg";
@@ -10,7 +11,7 @@ import UnderlineGray from "@/assets/write/underlineGray.svg";
 import UnderLine from "@/assets/write/underline.svg";
 import ImgGray from "@/assets/write/imgGraymini.svg";
 import Img from "@/assets/write/img.svg";
-import React, {RefObject, useState} from "react";
+import React, {RefObject, useEffect, useState} from "react";
 
 export default function ContentInputScreen(
   {title,
@@ -84,9 +85,14 @@ export default function ContentInputScreen(
   const [under, setUnder] = useState(true);
   const [cancel, setCancel] = useState(true);
   const [img, setImg] = useState(true);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
-
-  const isAdmin = parseJwt(localStorage.getItem("token") ?? "");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAdmin(parseJwt(token));
+    }
+  }, []);
   function parseJwt(token: string): boolean | null {
     try {
       const base64Url = token.split('.')[1];
