@@ -18,25 +18,25 @@ export async function POST(req: Request) { // 'export default' 제거, 함수 �
     console.log('EMAIL_HOST:', process.env.EMAIL_HOST ? '설정됨' : '설정 안됨');
     console.log('EMAIL_PORT:', process.env.EMAIL_PORT ? '설정됨' : '설정 안됨');
     console.log('EMAIL_USER:', process.env.EMAIL_USER ? '설정됨' : '설정 안됨');
-    // console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? '설정됨' : '설정 안됨 (보안상 값은 출력X)'); // 실제 값 출력 금지
+    console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? '설정됨' : '설정 안됨 (보안상 값은 출력X)'); // 실제 값 출력 금지
 
-    // if (!process.env.EMAIL_HOST || !process.env.EMAIL_PORT || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    //   console.error("API Route: 이메일 환경 변수가 제대로 설정되지 않았습니다.");
-    //   return NextResponse.json({ message: 'Server configuration error: Missing environment variables.' }, { status: 500 });
-    // }
+    if (!process.env.EMAIL_HOST || !process.env.EMAIL_PORT || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("API Route: 이메일 환경 변수가 제대로 설정되지 않았습니다.");
+      return NextResponse.json({ message: 'Server configuration error: Missing environment variables.' }, { status: 500 });
+    }
 
-    // const transporter = nodemailer.createTransport({
-    //   host: process.env.EMAIL_HOST,
-    //   port: parseInt(process.env.EMAIL_PORT as string, 10),
-    //   secure: process.env.EMAIL_PORT === '465', // true for 465, false for other ports (587 usually needs STARTTLS)
-    //   auth: {
-    //     user: process.env.EMAIL_USER,
-    //     pass: process.env.EMAIL_PASS,
-    //   },
-    //   tls: {
-    //     rejectUnauthorized: false // 개발 환경에서만 사용, 실제 서비스에서는 true 권장
-    //   }
-    // });
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: parseInt(process.env.EMAIL_PORT as string, 10),
+      secure: process.env.EMAIL_PORT === '465', // true for 465, false for other ports (587 usually needs STARTTLS)
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false // 개발 환경에서만 사용, 실제 서비스에서는 true 권장
+      }
+    });
 
     console.log('API Route: Nodemailer transporter 생성 완료');
 
