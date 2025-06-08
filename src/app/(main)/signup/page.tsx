@@ -3,7 +3,8 @@ import { useRouter } from "next/navigation";
 
 export default function Signup() {
   const router = useRouter();
-  const KAKAO_BASE = process.env.NEXT_PUBLIC_KAKAO_BASE;
+  // const KAKAO_BASE = process.env.NEXT_PUBLIC_KAKAO_BASE;
+  const KAKAO_BASE = "https://ndie-be-985895714915.europe-west1.run.app/oauth2/authorization/kakao";
   const next = () => {
     router.push("/signupagree");
   }

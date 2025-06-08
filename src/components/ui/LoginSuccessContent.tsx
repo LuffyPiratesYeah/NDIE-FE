@@ -8,7 +8,8 @@ export default function LoginSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setToken = useAuthStore((state) => state.setToken);
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+  // const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+  const API_BASE = "https://ndie-be-985895714915.europe-west1.run.app";
 
   useEffect(() => {
     const code = searchParams.get('code');
