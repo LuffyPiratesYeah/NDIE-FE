@@ -1,0 +1,24 @@
+# Query: ^\\s*console\\.log\\(.*\\);\\s*$\\n
+# Flags: RegExp
+# ContextLines: 1
+
+3개 결과 - 3 파일
+
+src/app/(main)/[datas]/[id]/page.tsx:
+  67      }
+  
+  69: 
+  70:     axios.post(`https://ndie-be-985895714915.europe-west1.run.app/QNA/comment`,{
+  71        titleId : id,
+
+src/app/(main)/signupform/page.tsx:
+  91        if (axios.isAxiosError(err)) {
+
+  93: 
+  93        }
+
+src/containers/main/OrgChart.tsx:
+  55  const OrgNodeComponent = ({node}:orgNodeComponentProps) => {
+  
+  57:   return (
+  58      <div className="flex flex-col items-center gap-4 text-2xl">

@@ -104,7 +104,7 @@ export default function ContentInputScreen(
       }
       return null;
     } catch (e) {
-      console.error('Invalid token', e);
+      
       return null;
     }
   }

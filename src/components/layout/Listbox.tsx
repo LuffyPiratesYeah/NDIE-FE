@@ -47,9 +47,6 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
       .then(() => {
         router.push(`/${datas}/${id}`);
       })
-      .catch((error) => {
-        console.error(error);
-      });
   };
 
   return (
