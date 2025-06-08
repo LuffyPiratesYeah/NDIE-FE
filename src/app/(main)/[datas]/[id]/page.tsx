@@ -6,8 +6,9 @@ import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import Loading from '@/components/ui/loading'; 
+import Loading from '@/components/ui/loading';
 
+export const runtime = 'edge';
 
 type IndexType = {
   prevId: number;
