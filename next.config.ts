@@ -1,6 +1,11 @@
 const nextConfig = {
   images: {
-    domains: ['storage.googleapis.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**', // 모든 https 도메인 허용
+      },
+    ],
   },
   env: {
     NEXT_PUBLIC_API_BASE: process.env.NEXT_PUBLIC_API_BASE,
@@ -9,9 +14,6 @@ const nextConfig = {
     EMAIL_PORT: process.env.EMAIL_PORT,
     EMAIL_USER: process.env.EMAIL_USER,
     EMAIL_PASS: process.env.EMAIL_PASS,
-  },
-  experimental: {
-    runtime: 'edge',
   },
 };
 
