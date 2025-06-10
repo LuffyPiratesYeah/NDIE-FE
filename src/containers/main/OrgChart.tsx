@@ -53,7 +53,7 @@ type orgNodeComponentProps = {
   node: OrgNode;
 }
 const OrgNodeComponent = ({node}:orgNodeComponentProps) => {
-  console.log(node);
+
   return (
     <div className="flex flex-col items-center gap-4 text-2xl">
       <div className={`w-[12.5rem] h-[5rem] border-2 ${node.level == 0 ? "bg-[#ED9735] border-[#BD894D]":node.level==1?"bg-[#F4AA55] border-[#ED9735]":node.level == 2?"bg-[#FCC07C] border-[#F4AA55]":"bg-[#FFFFFF] border-[#FCC07C]"} flex justify-center items-center rounded-md`}>

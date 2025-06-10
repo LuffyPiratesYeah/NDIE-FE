@@ -48,20 +48,25 @@ export default function DetailPage() {
         setRole(response.data.authorities[0].authority);
       })
       .catch((err) => {
-        console.error(err);
+  
       });
     }
   }, []);
+
+  function formatDate(dateStr: string) {
+    const [year, month, day] = dateStr.split('T')[0].split('-');
+    return `${parseInt(year)}년 ${parseInt(month)}월 ${parseInt(day)}일`;
+  }
   
   
 
 
   function comment(commentText: string) {
     if (!token) {
-      console.error("토큰이 없습니다.");
+      
       return;
     }
-    console.log(commentText, id);
+
 
     axios.post(`https://ndie-be-985895714915.europe-west1.run.app/QNA/comment`,{
       titleId : id,
@@ -75,7 +80,7 @@ export default function DetailPage() {
     }
     )
     .then((response) => {
-      console.log(response.data)
+      
       axios.get(`https://ndie-be-985895714915.europe-west1.run.app/QNA/comment/${id}`)
       .then((res) => {
         setcomments(res.data);
@@ -97,10 +102,10 @@ export default function DetailPage() {
         .get(`https://ndie-be-985895714915.europe-west1.run.app/${datas}/${id}`)
         .then((response) => {
           setItem(response.data);
-          console.log(response.data)
+          
         })
         .catch((error) => {
-          console.error(error);
+          
         });
       axios
         .post(`https://ndie-be-985895714915.europe-west1.run.app/${datas}/prev-next`,{
@@ -109,10 +114,10 @@ export default function DetailPage() {
         })
         .then((response) => {
           setIndexs(response.data);
-          console.log(response.data)
+          
         })
         .catch((error) => {
-          console.error(error);
+          
         });
 
         axios.get(
@@ -120,10 +125,10 @@ export default function DetailPage() {
         )
         .then((response) => {
           setcomments(response.data);
-          console.log(response)
+          
         })
         .catch((err) => {
-          console.error(err);
+          
         });
 
     }
@@ -136,7 +141,7 @@ export default function DetailPage() {
 
   ); 
   const name = sessionStorage.getItem('name');
-  console.log(name)
+  
   return (
   <div className=" flex flex-col gap-[2vh] items-center relative mt-[3vh] mb-[3vh] h-auto">
     <div className="w-[80%] flex flex-col gap-[3vh]">
@@ -164,7 +169,7 @@ export default function DetailPage() {
 
       <div className="flex flex-col w-[80vh]">
         <h1 className='text-2xl font-bold mb-2'>{item.title}</h1>
-        <p className='text-sm text-gray-500 mb-6'>{item.createdAt}</p>
+        <p className='text-sm text-gray-500 mb-6'>{formatDate(item.createdAt)}</p>
 
         <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
         <div
@@ -182,7 +187,7 @@ export default function DetailPage() {
 
     <div className='flex flex-col w-full'>
       <h1 className='text-2xl font-bold mb-2'>{name === 'QnA' ? 'Q. ' : ''}{item.title}</h1>
-      <p className='text-sm text-gray-500 mb-4'>{item.createdAt}</p>
+      <p className='text-sm text-gray-500 mb-4'>{formatDate(item.createdAt)}</p>
       <div className='flex flex-col gap-[20vh]'>
       <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
       <div className='flex flex-col gap-[40vh]'>

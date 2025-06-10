@@ -52,7 +52,7 @@ export default function SignupForm() {
 
   const handleSendVerificationEmail = async () => {
     try {
-      console.log(email)
+      
       const res = await fetch(`${NEXT_PUBLIC_API_BASE}/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -90,18 +90,9 @@ export default function SignupForm() {
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        console.log('회원가입 오류:', err.response?.data || err.message);
+
       }
-      console.log({
-        name,
-        email,
-        code,
-        password,
-        rePassword: repassword,
-        gender,
-        birthDate: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
-        activityArea: location,
-      });
+      
       alert('회원가입 중 오류가 발생했습니다.');
     }
   };

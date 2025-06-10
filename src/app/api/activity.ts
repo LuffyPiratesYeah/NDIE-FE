@@ -6,7 +6,7 @@ export const CreateActivity = async (data: { title: string, content: string , im
 };
 
 export const uploadImg = async (data: FormData) => {
-  console.log(data)
+  
   const res = await axiosInstance.post('/upload', data, {
     headers:{
       'Content-Type': 'multipart/form-data'

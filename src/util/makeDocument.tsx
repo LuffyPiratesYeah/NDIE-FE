@@ -44,6 +44,8 @@ export default function makeDocument(text : string) {
       component : (src : any) => {
         if(!src) return null;
         // src[1]가 src 주소임 (match 결과는 [전체, 첫번째 캡처 그룹])
+
+main
         return <div className="relative w-full h-[300px]"> {/* 원하는 높이 설정 */}
           <Image
             className="object-cover block mx-auto"

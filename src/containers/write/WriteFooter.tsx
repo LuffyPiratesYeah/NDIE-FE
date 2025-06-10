@@ -25,7 +25,7 @@ export default function WriteFooter({
     else if(selectedOption === "공지사항"){
       setIsLoadingTrue();
       const status = await CreateAnnouncement({title, content});
-      console.log(status)
+      
       if(status === 200){
         setIsLoadingFalse();
         router.push("/announcement");
