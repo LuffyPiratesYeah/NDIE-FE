@@ -3,7 +3,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_KEY,
+  baseURL: 'https://backend.ndie.or.kr/',
   headers: {
     'Content-Type': 'application/json',
   },

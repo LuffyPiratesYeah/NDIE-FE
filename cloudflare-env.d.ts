@@ -24,7 +24,6 @@ declare namespace NodeJS {
     EMAIL_HOST: string;
     // EMAIL_PORT는 반드시 string 타입으로만 정의해야 의미 없는 비교 에러를 방지합니다.
     EMAIL_PORT: string;
-    NEXT_PUBLIC_API_BASE: string;
     // 필요한 다른 vars 변수들을 여기에 추가합니다.
   }
 }
