@@ -9,5 +9,17 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
-  }
+  },
+  "secrets_store_secrets": [
+    {
+      "binding": "EMAIL_USER",
+      "store_id": "7ffbaf59953f46539d5feaea7446e83a",
+      "secret_name": "EMAIL_USER"
+    },
+    {
+      "binding": "EMAIL_PASS",
+      "store_id": "7ffbaf59953f46539d5feaea7446e83a",
+      "secret_name": "EMAIL_PASS"
+    }
+  ]
 }
