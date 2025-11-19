@@ -11,6 +11,14 @@
     "directory": ".open-next/assets",
     "binding": "src/assets"
   },
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true,
+      "persist": true
+    }
+  },
   "vars": [
     {
       "name": "NEXT_PUBLIC_API_BASE",
