@@ -11,6 +11,20 @@
     "directory": ".open-next/assets",
     "binding": "src/assets"
   },
+  "vars": [
+    {
+      "name": "NEXT_PUBLIC_API_BASE",
+      "value": "https://ndie-be-985895714915.europe-west1.run.app/"
+    },
+    {
+      "name": "EMAIL_HOST",
+      "value": "smtp.gmail.com"
+    },
+    {
+      "name": "EMAIL_PORT",
+      "value": "587"
+    }
+  ],
   "secrets_store_secrets": [
     {
       "binding": "EMAIL_USER",
