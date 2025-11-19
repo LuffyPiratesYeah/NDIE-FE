@@ -12,7 +12,7 @@ export default function SignupForm() {
   const [daysInMonth, setDaysInMonth] = useState<number[]>([]);
 
   // const NEXT_PUBLIC_API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-  const NEXT_PUBLIC_API_BASE = "https://ndie-be-985895714915.europe-west1.run.app";
+  const NEXT_PUBLIC_API_BASE = "https://backend.ndie.or.kr";
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
