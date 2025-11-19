@@ -6,10 +6,6 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "src/assets"
-  },
   "secrets_store_secrets": [
     {
       "binding": "EMAIL_USER",
