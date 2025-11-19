@@ -1,8 +1,8 @@
 'use client'
 
-import axios from 'axios';
 import React, { useState ,useEffect } from 'react'; 
 import Listbox from '../layout/Listbox';
+import axios from "@/lib/axiosInstance";
 
 type ListProps = {
     name: string;
@@ -17,7 +17,7 @@ type ListProps = {
     const [item,setitem] = useState([]);
 
     useEffect(() => {
-      axios.get(`https://ndie-be-985895714915.europe-west1.run.app/${data}`)
+      axios.get(`/${data}`)
         .then((response) => {
           setitem(response.data);
         });

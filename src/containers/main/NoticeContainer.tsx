@@ -71,7 +71,7 @@ export default function NoticeContainer() {
             transform: `translateX(-${(100 / notices.length) * currentIndex}%)`,
           }}
         >
-          {notices.map((notice, index) => (
+          {Array.isArray(notices) && notices.map((notice, index) => (
             <div
               key={index}
               className="w-full flex-shrink-0 p-6"

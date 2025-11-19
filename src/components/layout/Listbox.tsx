@@ -1,6 +1,6 @@
 "use client";
 
-import axios from 'axios';
+import axios from '@/lib/axiosInstance';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/ui/loading'; 
@@ -41,9 +41,9 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
 
   const deslist = (id: number) => {
     sessionStorage.setItem('name', name);
-    axios.get(`https://ndie-be-985895714915.europe-west1.run.app/document/up/${id}`);
+    axios.get(`/document/up/${id}`);
     axios
-      .get(`https://ndie-be-985895714915.europe-west1.run.app/${datas}/${id}`)
+      .get(`/${datas}/${id}`)
       .then(() => {
         router.push(`/${datas}/${id}`);
       })
@@ -80,7 +80,7 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
         <p>조회</p>
       </div>
 
-      {filteredItems.length > 0 ? (
+      {Array.isArray(filteredItems) ? (
         filteredItems.map((i) => (
           <div
             key={i.id}
