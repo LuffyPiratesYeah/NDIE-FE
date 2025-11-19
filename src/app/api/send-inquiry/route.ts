@@ -47,9 +47,6 @@ export async function POST(req: Request) {
       auth: {
         user: EMAIL_USER, // process.env를 직접 사용
         pass: EMAIL_PASS, // process.env를 직접 사용
-      },
-      tls: {
-        rejectUnauthorized: false
       }
     } as TransportOptions);
 
