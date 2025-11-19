@@ -30,9 +30,9 @@ export async function POST(req: Request) {
     const EMAIL_PASS = await getCloudflareContext().env.EMAIL_PASS.get(); // 수정
 
     // 환경 변수 검증 및 로그 (생략 가능하지만 디버깅에 유용)
-    console.log('EMAIL_HOST:', EMAIL_HOST ? '설정됨' : '설정 안됨');
-    console.log('EMAIL_PORT:', EMAIL_PORT ? '설정됨' : '설정 안됨');
-    console.log('EMAIL_USER:', EMAIL_USER ? '설정됨' : '설정 안됨');
+    console.log('EMAIL_HOST:', EMAIL_HOST ? `설정됨 ${EMAIL_HOST}` : '설정 안됨');
+    console.log('EMAIL_PORT:', EMAIL_PORT ? `설정됨 ${EMAIL_PORT}` : '설정 안됨');
+    console.log('EMAIL_USER:', EMAIL_USER ? `설정됨 ${EMAIL_USER}` : '설정 안됨');
     console.log('EMAIL_PASS:', EMAIL_PASS ? '설정됨' : '설정 안됨 (보안상 값은 출력X)');
 
     if (!EMAIL_HOST || !EMAIL_PORT || !EMAIL_USER || !EMAIL_PASS) {
