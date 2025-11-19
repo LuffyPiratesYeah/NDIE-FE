@@ -26,8 +26,8 @@ export async function POST(req: Request) {
     // Cloudflare 배포 환경에서도 표준 Node.js/Next.js 방식인 process.env를 사용해야 합니다.
     const EMAIL_HOST = process.env.EMAIL_HOST; // 수정
     const EMAIL_PORT = process.env.EMAIL_PORT; // 수정
-    const EMAIL_USER = getCloudflareContext().env.EMAIL_USER; // 수정
-    const EMAIL_PASS = getCloudflareContext().env.EMAIL_PASS; // 수정
+    const EMAIL_USER = await getCloudflareContext().env.EMAIL_USER.get(); // 수정
+    const EMAIL_PASS = await getCloudflareContext().env.EMAIL_PASS.get(); // 수정
 
     // 환경 변수 검증 및 로그 (생략 가능하지만 디버깅에 유용)
     console.log('EMAIL_HOST:', EMAIL_HOST ? '설정됨' : '설정 안됨');
