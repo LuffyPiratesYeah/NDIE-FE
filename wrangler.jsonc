@@ -20,7 +20,7 @@
     }
   },
   "vars": {
-    "NEXT_PUBLIC_API_BASE": "https://ndie-be-985895714915.europe-west1.run.app/",
+    "NEXT_PUBLIC_API_BASE": "https://backend.ndie.or.kr/",
     "EMAIL_HOST": "smtp.gmail.com",
     "EMAIL_PORT": "587"
   },
