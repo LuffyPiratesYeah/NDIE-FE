@@ -1,11 +1,10 @@
 // app/api/send-inquiry/route.ts
-// 파일 상단에 import { NextResponse } from 'next/server'; 가 있는지 확인
 
-import { NextResponse } from 'next/server'; // 필수
+import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-// POST 요청을 처리하는 함수를 'POST'라는 이름으로 export 합니다.
-export async function POST(req: Request, env:CloudflareEnv) { // 'export default' 제거, 함수 이름을 'POST'로 지정
+// POST 함수 시그니처에서 'env:CloudflareEnv'를 제거합니다.
+export async function POST(req: Request) {
   console.log('API Route: POST 요청 수신');
 
   try {
@@ -13,15 +12,19 @@ export async function POST(req: Request, env:CloudflareEnv) { // 'export default
     const { name, email, organization, selectedTag, content } = body;
 
     console.log('API Route: 요청 바디 파싱 완료', body);
-    const EMAIL_HOST = env["1"].value;
-    const EMAIL_PORT = env["2"].value;
-    const EMAIL_USER = await env.EMAIL_USER.get();
-    const EMAIL_PASS = await env.EMAIL_PASS.get();
+
+    // ⛔️ 빌드 에러의 원인이 되는 Cloudflare Workers 환경 변수 접근 로직을 제거합니다. ⛔️
+    // Cloudflare 배포 환경에서도 표준 Node.js/Next.js 방식인 process.env를 사용해야 합니다.
+    const EMAIL_HOST = process.env.EMAIL_HOST; // 수정
+    const EMAIL_PORT = process.env.EMAIL_PORT; // 수정
+    const EMAIL_USER = process.env.EMAIL_USER; // 수정
+    const EMAIL_PASS = process.env.EMAIL_PASS; // 수정
+
     // 환경 변수 검증 및 로그 (생략 가능하지만 디버깅에 유용)
     console.log('EMAIL_HOST:', EMAIL_HOST ? '설정됨' : '설정 안됨');
     console.log('EMAIL_PORT:', EMAIL_PORT ? '설정됨' : '설정 안됨');
     console.log('EMAIL_USER:', EMAIL_USER ? '설정됨' : '설정 안됨');
-    console.log('EMAIL_PASS:', EMAIL_PASS ? '설정됨' : '설정 안됨 (보안상 값은 출력X)'); // 실제 값 출력 금지
+    console.log('EMAIL_PASS:', EMAIL_PASS ? '설정됨' : '설정 안됨 (보안상 값은 출력X)');
 
     if (!EMAIL_HOST || !EMAIL_PORT || !EMAIL_USER || !EMAIL_PASS) {
       console.error("API Route: 이메일 환경 변수가 제대로 설정되지 않았습니다.");
@@ -29,36 +32,23 @@ export async function POST(req: Request, env:CloudflareEnv) { // 'export default
     }
 
     const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: parseInt(process.env.EMAIL_PORT as string, 10),
-      secure: process.env.EMAIL_PORT === '465', // true for 465, false for other ports (587 usually needs STARTTLS)
+      host: EMAIL_HOST, // process.env를 직접 사용
+      port: parseInt(EMAIL_PORT as string, 10), // process.env를 직접 사용
+      secure: EMAIL_PORT === '465', // true for 465, false for other ports (587 usually needs STARTTLS)
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: EMAIL_USER, // process.env를 직접 사용
+        pass: EMAIL_PASS, // process.env를 직접 사용
       },
       tls: {
-        rejectUnauthorized: false // 개발 환경에서만 사용, 실제 서비스에서는 true 권장
+        rejectUnauthorized: false
       }
     });
 
     console.log('API Route: Nodemailer transporter 생성 완료');
 
-    // const mailOptions = {
-    //   from: `"${name}" <${email}>`,
-    //   to: process.env.EMAIL_USER, // 이 문의를 받을 이메일 주소 (관리자 이메일 등)
-    //   subject: `[문의] ${selectedTag} - ${name}님의 문의`,
-    //   html: `
-    //     <p><strong>이름:</strong> ${name}</p>
-    //     <p><strong>단체/기관명:</strong> ${organization || '없음'}</p>
-    //     <p><strong>이메일:</strong> ${email}</p>
-    //     <p><strong>문의 태그:</strong> ${selectedTag}</p>
-    //     <p><strong>문의 내용:</strong></p>
-    //     <p>${content}</p>
-    //   `,
-    // };
     const mailOptions = {
       from: `"${name}" <${email}>`,
-      to: "ploytechcourse@gmail.com", // 이 문의를 받을 이메일 주소 (관리자 이메일 등)
+      to: "ploytechcourse@gmail.com",
       subject: `[문의] ${selectedTag} - ${name}님의 문의`,
       html: `
         <p><strong>이름:</strong> ${name}</p>
@@ -80,10 +70,3 @@ export async function POST(req: Request, env:CloudflareEnv) { // 'export default
     return NextResponse.json({ message: `이메일 발송에 실패했습니다: ${errorMessage}` }, { status: 500 });
   }
 }
-
-// 만약 GET 요청도 허용하고 싶다면 다음과 같이 정의합니다.
-// export async function GET(req: Request) {
-//   return NextResponse.json({ message: 'GET request to send-inquiry API' }, { status: 200 });
-// }
-
-
