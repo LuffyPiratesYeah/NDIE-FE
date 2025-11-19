@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
     const mailOptions = {
       from: `"${name}" <${email}>`,
-      to: "ploytechcourse@gmail.com",
+      to: EMAIL_HOST,
       subject: `[문의] ${selectedTag} - ${name}님의 문의`,
       html: `
         <p><strong>이름:</strong> ${name}</p>
