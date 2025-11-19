@@ -47,7 +47,7 @@ export default function DetailPage() {
       .then((response) => {
         setRole(response.data.authorities[0].authority);
       })
-      .catch((err) => {
+      .catch(() => {
   
       });
     }
@@ -79,7 +79,7 @@ export default function DetailPage() {
       },
     }
     )
-    .then((response) => {
+    .then(() => {
       
       axios.get(`https://ndie-be-985895714915.europe-west1.run.app/QNA/comment/${id}`)
       .then((res) => {
@@ -104,7 +104,7 @@ export default function DetailPage() {
           setItem(response.data);
           
         })
-        .catch((error) => {
+        .catch(() => {
           
         });
       axios
@@ -116,7 +116,7 @@ export default function DetailPage() {
           setIndexs(response.data);
           
         })
-        .catch((error) => {
+        .catch(() => {
           
         });
 
@@ -127,7 +127,7 @@ export default function DetailPage() {
           setcomments(response.data);
           
         })
-        .catch((err) => {
+        .catch(() => {
           
         });
 

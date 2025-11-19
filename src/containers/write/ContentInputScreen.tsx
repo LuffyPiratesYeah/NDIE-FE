@@ -109,7 +109,7 @@ export default function ContentInputScreen(
         return data.role === "ROLE_ADMIN";
       }
       return null;
-    } catch (e) {
+    } catch {
       
       return null;
     }

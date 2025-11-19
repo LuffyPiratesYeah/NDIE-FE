@@ -62,7 +62,7 @@ export default function InquiryForm() {
       } else {
         alert(`이메일 발송 실패: ${data.message}`); // 실패 메시지 표시
       }
-    } catch (error) {
+    } catch {
       
       alert('문의 전송 중 알 수 없는 오류가 발생했습니다.');
     }
