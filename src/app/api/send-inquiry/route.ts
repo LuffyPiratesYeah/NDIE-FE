@@ -1,14 +1,23 @@
 // app/api/send-inquiry/route.ts
 
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import nodemailer, {TransportOptions} from 'nodemailer';
+
+interface InquiryRequestBody {
+  name: string;
+  email: string;
+  organization?: string;
+  selectedTag: string;
+  content: string;
+}
 
 // POST 함수 시그니처에서 'env:CloudflareEnv'를 제거합니다.
 export async function POST(req: Request) {
   console.log('API Route: POST 요청 수신');
 
   try {
-    const body = await req.json();
+    const body = (await req.json()) as InquiryRequestBody;
     const { name, email, organization, selectedTag, content } = body;
 
     console.log('API Route: 요청 바디 파싱 완료', body);
@@ -17,8 +26,8 @@ export async function POST(req: Request) {
     // Cloudflare 배포 환경에서도 표준 Node.js/Next.js 방식인 process.env를 사용해야 합니다.
     const EMAIL_HOST = process.env.EMAIL_HOST; // 수정
     const EMAIL_PORT = process.env.EMAIL_PORT; // 수정
-    const EMAIL_USER = process.env.EMAIL_USER; // 수정
-    const EMAIL_PASS = process.env.EMAIL_PASS; // 수정
+    const EMAIL_USER = getCloudflareContext().env.EMAIL_USER; // 수정
+    const EMAIL_PASS = getCloudflareContext().env.EMAIL_PASS; // 수정
 
     // 환경 변수 검증 및 로그 (생략 가능하지만 디버깅에 유용)
     console.log('EMAIL_HOST:', EMAIL_HOST ? '설정됨' : '설정 안됨');
@@ -42,7 +51,7 @@ export async function POST(req: Request) {
       tls: {
         rejectUnauthorized: false
       }
-    });
+    } as TransportOptions);
 
     console.log('API Route: Nodemailer transporter 생성 완료');
 
