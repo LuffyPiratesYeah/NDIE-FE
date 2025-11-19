@@ -8,7 +8,7 @@
   ],
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "ASSETS"
+    "binding": "src/assets"
   },
   "secrets_store_secrets": [
     {
