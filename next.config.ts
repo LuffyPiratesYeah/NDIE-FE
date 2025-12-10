@@ -1,19 +1,21 @@
-const nextConfig = {
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**', // 모든 https 도메인 허용
+        hostname: '**',
       },
     ],
+    // Cloudflare Workers에서는 이미지 최적화 비활성화
+    unoptimized: true,
   },
-  env: {
-    NEXT_PUBLIC_API_BASE: process.env.NEXT_PUBLIC_API_BASE,
-    NEXT_PUBLIC_KAKAO_BASE: process.env.NEXT_PUBLIC_KAKAO_BASE,
-    EMAIL_HOST: process.env.EMAIL_HOST,
-    EMAIL_PORT: process.env.EMAIL_PORT,
-    EMAIL_USER: process.env.EMAIL_USER,
-    EMAIL_PASS: process.env.EMAIL_PASS,
+  // Cloudflare Workers 호환성
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
   },
 };
 
