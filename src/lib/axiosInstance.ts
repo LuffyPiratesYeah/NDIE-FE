@@ -3,7 +3,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://backend.ndie.or.kr/',
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -13,9 +13,11 @@ const axiosInstance: AxiosInstance = axios.create({
 // 요청 인터셉터
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = localStorage.getItem('token');
-    if (token && config.headers) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+    if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.getItem === 'function') {
+      const token = window.localStorage.getItem('token');
+      if (token && config.headers) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
     }
     return config;
   },

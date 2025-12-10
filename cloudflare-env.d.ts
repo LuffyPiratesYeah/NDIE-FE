@@ -1,3 +1,5 @@
+/// <reference types="@cloudflare/workers-types" />
+
 // 1. Cloudflare Workers 환경 변수 타입 정의
 // 이 타입은 getCloudflareContext().env의 타입을 지정하여 TS2339 에러를 해결합니다.
 interface SecretsStoreSecret {
@@ -11,6 +13,7 @@ interface CloudflareEnv {
   // wrangler.toml의 secrets_store_secrets에 정의된 바인딩 이름과 일치해야 합니다.
   EMAIL_USER: SecretsStoreSecret;
   EMAIL_PASS: SecretsStoreSecret;
+  DB: D1Database;
 
   // 필요한 다른 Secret 변수들을 여기에 추가합니다.
   // 예: DB: D1Database;

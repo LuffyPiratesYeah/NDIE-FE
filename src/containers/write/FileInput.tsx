@@ -21,10 +21,10 @@ export default function FileInput({
     data.append('file', img);
 
     const src = await uploadImg(data);
-    if(src){
+    if(src?.url){
       addText(`<이미지 src="${src.url}"></이미지>`, content.length);
     }else{
-      alert("img 등록에 실패")
+      alert(src?.message || "img 등록에 실패");
     }
   }
 

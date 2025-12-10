@@ -1,5 +1,8 @@
 'use client'
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+
 type TimelineEntry = {
   date: string;
   title: string;
@@ -10,37 +13,41 @@ type TimelineEntry = {
 type TimelineData = {
   [year: string]: TimelineEntry[];
 };
-const timelineData: TimelineData = {
+
+const defaultData: TimelineData = {
   "2024": [
-    {
-      date: "03.12",
-      title: "연혁1",
-      description: `연혁1 내용들 연혁1 내용들연혁1 내용들연혁1 내용들연혁1 내용들
-연혁1 내용들연혁1 내용들연혁1 내용들`,
-      type: "filled"
-    },
-    {
-      date: "03.12",
-      title: "연혁2",
-      description: `연혁1 내용들 연혁1 내용들연혁1 내용들연혁1 내용들연혁1 내용들
-연혁1 내용들연혁1 내용들연혁1 내용들`,
-      type: "outlined"
-    }
+    { date: "03.12", title: "연혁1", description: "연혁1 내용들", type: "filled" },
+    { date: "03.12", title: "연혁2", description: "연혁2 내용들", type: "outlined" }
   ],
   "2025": [
-    {
-      date: "01.01",
-      title: "계획1",
-      description: "2025년 내용 예정입니다.",
-      type: "outlined"
-    }
+    { date: "01.01", title: "계획1", description: "2025년 내용 예정입니다.", type: "outlined" }
   ]
 };
-export default function NDIETimeline() {
-  const years = Object.keys(timelineData);
-  const [selectedYear, setSelectedYear] = useState("2024");
 
-  const entries = timelineData[selectedYear];
+export default function NDIETimeline() {
+  const [timelineData, setTimelineData] = useState<TimelineData>(defaultData);
+  const [selectedYear, setSelectedYear] = useState("2024");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const docRef = doc(db, "history", "timeline");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setTimelineData(docSnap.data() as TimelineData);
+        }
+      } catch (e) {
+        console.error("연혁 로드 실패:", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+
+  const years = Object.keys(timelineData).sort();
+  const entries = timelineData[selectedYear] || [];
 
   return (
     <div className="text-black font-sans relative">

@@ -7,6 +7,14 @@
     "nodejs_compat",
     "enable_nodejs_process_v2"
   ],
+  "migrations_dir": "migrations",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ndie-db",
+      "database_id": "__FILL_IN_FROM_WRANGLER_D1_CREATE__"
+    }
+  ],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "src/assets"

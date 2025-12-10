@@ -39,31 +39,25 @@ export default function InquiryForm() {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/send-inquiry', { // API 호출 경로는 동일
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      const { collection, addDoc } = await import("firebase/firestore");
+      const { db } = await import("@/lib/firebase");
+
+      await addDoc(collection(db, "inquiries"), {
+        ...formData,
+        createdAt: new Date().toISOString()
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        alert(data.message); // 성공 메시지 표시
-        // 폼 초기화
-        setFormData({
-          name: '',
-          organization: '',
-          email: '',
-          selectedTag: '기타',
-          content: '',
-        });
-      } else {
-        alert(`이메일 발송 실패: ${data.message}`); // 실패 메시지 표시
-      }
-    } catch {
-      
+      alert('문의가 접수되었습니다.'); // 성공 메시지 표시
+      // 폼 초기화
+      setFormData({
+        name: '',
+        organization: '',
+        email: '',
+        selectedTag: '기타',
+        content: '',
+      });
+    } catch (e) {
+      console.error(e);
       alert('문의 전송 중 알 수 없는 오류가 발생했습니다.');
     }
   };
@@ -142,9 +136,9 @@ export default function InquiryForm() {
                     // 태그 버튼 스타일 변경: 회색 배경, 둥근 모서리, 선택 시 테두리
                     className={`px-6 py-2 rounded-full text-lg font-semibold transition-colors duration-200
                       ${formData.selectedTag === tag
-                      ? 'border border-gray-400 text-gray-800 bg-white' // 선택됨
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200' // 선택 안됨
-                    }`}
+                        ? 'border border-gray-400 text-gray-800 bg-white' // 선택됨
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200' // 선택 안됨
+                      }`}
                   >
                     {tag}
                   </button>

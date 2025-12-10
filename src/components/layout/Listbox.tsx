@@ -1,12 +1,12 @@
 "use client";
 
-import axios from '@/lib/axiosInstance';
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Loading from '@/components/ui/loading'; 
+import Loading from '@/components/ui/loading';
 
 type ListboxProps = {
-  item: { id: number; title: string; username: string; views: number; createdAt: string }[];
+  item: { id: string | number; title: string; username: string; views: number; createdAt: string }[];
   datas: string;
   name: string;
 };
@@ -18,7 +18,7 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
   const [hasSearched, setHasSearched] = useState(false); // 🔸 추가
 
   const handleSearch = () => {
-    setHasSearched(true); 
+    setHasSearched(true);
     const filtered = item.filter((i) =>
       i.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -26,6 +26,7 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
   };
 
   function formatDate(dateStr: string) {
+    if (!dateStr) return "";
     const [year, month, day] = dateStr.split('T')[0].split('-');
     return `${parseInt(year)}년 ${parseInt(month)}월 ${parseInt(day)}일`;
   }
@@ -34,19 +35,20 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
-      setFilteredItems(item); 
-      setHasSearched(false); 
+      setFilteredItems(item);
+      setHasSearched(false);
     }
   }, [searchTerm, item]);
 
-  const deslist = (id: number) => {
+  const deslist = (id: string | number) => {
     sessionStorage.setItem('name', name);
-    axios.get(`/document/up/${id}`);
-    axios
-      .get(`/${datas}/${id}`)
-      .then(() => {
-        router.push(`/${datas}/${id}`);
-      })
+    // TODO: Increment view count in Firestore if needed
+
+    let route = datas;
+    if (datas === 'activity') route = 'act';
+    else if (datas === 'QNA') route = 'qna';
+
+    router.push(`/${route}/${id}`);
   };
 
   return (
@@ -81,17 +83,17 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
       </div>
 
       {Array.isArray(filteredItems) ? (
-        filteredItems.map((i) => (
+        filteredItems.map((i, index) => (
           <div
             key={i.id}
             className="grid grid-cols-5 text-center py-2 border-b border-gray-200 text-sm cursor-pointer"
             onClick={() => deslist(i.id)}
           >
-            <p>{i.id}</p>
+            <p>{filteredItems.length - index}</p>
             <p className="truncate">{i.title}</p>
-            <p>{i.username}</p>
+            <p>{i.username || '관리자'}</p>
             <p>{formatDate(i.createdAt)}</p>
-            <p>{i.views}</p>
+            <p>{i.views || 0}</p>
           </div>
         ))
       ) : hasSearched ? (
