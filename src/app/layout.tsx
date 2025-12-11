@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "@/lib/polyfills/storage";
 import FirebaseAnalytics from "@/components/FirebaseAnalytics";
 
 const geistSans = Geist({
