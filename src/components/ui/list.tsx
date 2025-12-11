@@ -20,7 +20,10 @@ export function List({ name, data }: ListProps) {
     const fetchData = async () => {
       try {
         const { collection, getDocs } = await import("firebase/firestore");
-        const { db } = await import("@/lib/firebase");
+        const { getFirebaseDb } = await import("@/lib/firebase");
+
+        const db = await getFirebaseDb();
+        if (!db) return;
 
         const querySnapshot = await getDocs(collection(db, data));
         const items = querySnapshot.docs.map(doc => ({

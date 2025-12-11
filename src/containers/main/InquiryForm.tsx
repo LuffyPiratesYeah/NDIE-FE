@@ -40,7 +40,13 @@ export default function InquiryForm() {
 
     try {
       const { collection, addDoc } = await import("firebase/firestore");
-      const { db } = await import("@/lib/firebase");
+      const { getFirebaseDb } = await import("@/lib/firebase");
+
+      const db = await getFirebaseDb();
+      if (!db) {
+        alert("Firebase가 초기화되지 않았습니다.");
+        return;
+      }
 
       await addDoc(collection(db, "inquiries"), {
         ...formData,

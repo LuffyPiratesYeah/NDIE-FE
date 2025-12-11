@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '2mb',
     },
   },
+  // Node.js 25의 실험적 localStorage 문제 해결
+  serverExternalPackages: ['firebase', 'firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage', 'firebase/analytics'],
 };
 
 export default nextConfig;

@@ -1,8 +1,8 @@
-import { getStorage } from "firebase/storage";
-import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
-import { getAuth, Auth } from "firebase/auth";
-import { getFirestore, Firestore } from "firebase/firestore";
-import { getAnalytics, isSupported } from "firebase/analytics";
+import type { FirebaseStorage } from "firebase/storage";
+import type { FirebaseApp } from "firebase/app";
+import type { Auth } from "firebase/auth";
+import type { Firestore } from "firebase/firestore";
+import type { Analytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyCfRb2YUW104q4GMnWe-sWySwbpkkGztrA",
@@ -14,78 +14,80 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-XYVNNJM4G4"
 };
 
-// Initialize Firebase App (싱글톤)
-let app: FirebaseApp;
-if (typeof window !== 'undefined') {
-  try {
-    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-    console.log('[Firebase] App 초기화 완료:', app.name);
-  } catch (error) {
-    console.error('[Firebase] App 초기화 실패:', error);
-    throw error;
-  }
-} else {
-  app = {} as FirebaseApp;
-}
+// Cached instances
+let _app: FirebaseApp | null = null;
+let _auth: Auth | null = null;
+let _db: Firestore | null = null;
+let _storage: FirebaseStorage | null = null;
 
-// Initialize Auth
-let auth: Auth | any;
-if (typeof window !== 'undefined') {
-  try {
-    auth = getAuth(app);
-    console.log('[Firebase] Auth 초기화 완료');
-  } catch (error) {
-    console.error('[Firebase] Auth 초기화 실패:', error);
-    auth = {} as any;
-  }
-} else {
-  auth = {} as any;
-}
+const isBrowser = (): boolean => {
+  return typeof window !== 'undefined' && typeof window.document !== 'undefined';
+};
 
-// Initialize Firestore
-let db: Firestore | any;
-if (typeof window !== 'undefined') {
-  try {
-    db = getFirestore(app);
-    console.log('[Firebase] Firestore 초기화 완료');
+// 동적 초기화 함수들
+export const getFirebaseApp = async (): Promise<FirebaseApp | null> => {
+  if (!isBrowser()) return null;
+  if (_app) return _app;
+  
+  const { initializeApp, getApps, getApp } = await import("firebase/app");
+  _app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+  return _app;
+};
 
-    // 연결 테스트
-    import('firebase/firestore').then(({ collection, getDocs, limit, query }) => {
-      const testQuery = query(collection(db, 'QNA'), limit(1));
-      getDocs(testQuery)
-        .then(() => console.log('[Firebase] Firestore 연결 테스트 성공 ✅'))
-        .catch((err) => console.error('[Firebase] Firestore 연결 테스트 실패 ❌:', err));
-    });
-  } catch (error) {
-    console.error('[Firebase] Firestore 초기화 실패:', error);
-    db = {} as any;
-  }
-} else {
-  db = {} as any;
-}
+export const getFirebaseAuth = async (): Promise<Auth | null> => {
+  if (!isBrowser()) return null;
+  if (_auth) return _auth;
+  
+  const app = await getFirebaseApp();
+  if (!app) return null;
+  
+  const { getAuth } = await import("firebase/auth");
+  _auth = getAuth(app);
+  return _auth;
+};
 
-// Initialize Storage
-let storage: any;
-if (typeof window !== 'undefined') {
-  try {
-    storage = getStorage(app);
-    console.log('[Firebase] Storage 초기화 완료');
-  } catch (error) {
-    console.error('[Firebase] Storage 초기화 실패:', error);
-    storage = {} as any;
-  }
-} else {
-  storage = {} as any;
-}
+export const getFirebaseDb = async (): Promise<Firestore | null> => {
+  if (!isBrowser()) return null;
+  if (_db) return _db;
+  
+  const app = await getFirebaseApp();
+  if (!app) return null;
+  
+  const { getFirestore } = await import("firebase/firestore");
+  _db = getFirestore(app);
+  return _db;
+};
 
-export { app, auth, db, storage };
+export const getFirebaseStorage = async (): Promise<FirebaseStorage | null> => {
+  if (!isBrowser()) return null;
+  if (_storage) return _storage;
+  
+  const app = await getFirebaseApp();
+  if (!app) return null;
+  
+  const { getStorage } = await import("firebase/storage");
+  _storage = getStorage(app);
+  return _storage;
+};
 
-export const initAnalytics = async () => {
-  if (typeof window !== 'undefined') {
-    const supported = await isSupported();
-    if (supported) {
-      return getAnalytics(app);
-    }
+// 기존 코드 호환성을 위한 동기 export (deprecated - 비동기 함수 사용 권장)
+// 이 값들은 항상 null이며, 실제 사용 시 동적 import 필요
+export const app: FirebaseApp | null = null;
+export const auth: Auth | null = null;
+export const db: Firestore | null = null;
+export const storage: FirebaseStorage | null = null;
+
+// Analytics
+export const initAnalytics = async (): Promise<Analytics | null> => {
+  if (!isBrowser()) return null;
+  
+  const app = await getFirebaseApp();
+  if (!app) return null;
+  
+  const { getAnalytics, isSupported } = await import("firebase/analytics");
+  const supported = await isSupported();
+  if (supported) {
+    return getAnalytics(app);
   }
   return null;
 };

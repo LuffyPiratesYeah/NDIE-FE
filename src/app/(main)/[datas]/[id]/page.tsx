@@ -39,9 +39,13 @@ export default function DetailPage() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { auth, db } = await import("@/lib/firebase");
+      const { getFirebaseAuth, getFirebaseDb } = await import("@/lib/firebase");
       const { onAuthStateChanged } = await import("firebase/auth");
       const { doc, getDoc } = await import("firebase/firestore");
+
+      const auth = await getFirebaseAuth();
+      const db = await getFirebaseDb();
+      if (!auth || !db) return;
 
       onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -74,7 +78,10 @@ export default function DetailPage() {
     const fetchData = async () => {
       try {
         const { doc, getDoc, collection, query, orderBy, limit, getDocs, startAfter } = await import("firebase/firestore");
-        const { db } = await import("@/lib/firebase");
+        const { getFirebaseDb } = await import("@/lib/firebase");
+
+        const db = await getFirebaseDb();
+        if (!db) return;
 
         const collectionName = getCollectionName(datas);
 
@@ -134,7 +141,10 @@ export default function DetailPage() {
     if (!text) return;
     try {
       const { doc, updateDoc } = await import("firebase/firestore");
-      const { db } = await import("@/lib/firebase");
+      const { getFirebaseDb } = await import("@/lib/firebase");
+
+      const db = await getFirebaseDb();
+      if (!db) return;
 
       const collectionName = getCollectionName(datas);
       await updateDoc(doc(db, collectionName, id), {

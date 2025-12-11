@@ -1,13 +1,12 @@
-import { collection, addDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage, auth } from "@/lib/firebase";
+import { getFirebaseDb, getFirebaseStorage, getFirebaseAuth } from "@/lib/firebase";
 
 export const CreateActivity = async (data: { title: string, content: string, image: string }) => {
   console.log('[CreateActivity] 시작:', data);
 
   try {
     // Firestore 연결 확인
-    if (!db || typeof db.type === 'undefined') {
+    const db = await getFirebaseDb();
+    if (!db) {
       console.error('[CreateActivity] Firestore 초기화 안됨');
       return {
         status: 500 as const,
@@ -16,6 +15,7 @@ export const CreateActivity = async (data: { title: string, content: string, ima
     }
 
     // Firebase Auth 상태 확인
+    const auth = await getFirebaseAuth();
     const currentUser = auth?.currentUser;
     console.log('[CreateActivity] Firebase Auth 상태:', currentUser ? `로그인됨 (${currentUser.email})` : '로그인 안됨');
     
@@ -35,6 +35,7 @@ export const CreateActivity = async (data: { title: string, content: string, ima
     };
 
     console.log('[CreateActivity] addDoc 호출 시작...');
+    const { collection, addDoc } = await import("firebase/firestore");
     const docRef = await addDoc(collection(db, "activity"), docData);
     
     console.log('[CreateActivity] 문서 생성 성공:', docRef.id);
@@ -71,7 +72,8 @@ export const uploadImg = async (data: FormData) => {
 
   try {
     // Storage 연결 확인
-    if (!storage || typeof storage.app === 'undefined') {
+    const storage = await getFirebaseStorage();
+    if (!storage) {
       console.error('[uploadImg] Storage 초기화 안됨');
       return {
         url: null,
@@ -87,6 +89,7 @@ export const uploadImg = async (data: FormData) => {
 
     console.log('[uploadImg] 파일 업로드 시작:', file.name);
 
+    const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
     const storageRef = ref(storage, `uploads/${Date.now()}_${file.name}`);
 
     // 타임아웃 60초 (이미지 업로드는 시간이 더 걸릴 수 있음)
