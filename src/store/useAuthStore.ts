@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 
 interface AuthState {
   token: string | null;
@@ -8,6 +8,28 @@ interface AuthState {
   setRole: (role: 'ADMIN' | 'USER' | null) => void;
   setUser: (token: string | null, role: 'ADMIN' | 'USER' | null) => void;
 }
+
+// 서버사이드에서 안전한 스토리지
+const noopStorage: StateStorage = {
+  getItem: () => null,
+  setItem: () => {},
+  removeItem: () => {},
+};
+
+const safeStorage: StateStorage = {
+  getItem: (name) => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem(name);
+  },
+  setItem: (name, value) => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(name, value);
+  },
+  removeItem: (name) => {
+    if (typeof window === 'undefined') return;
+    localStorage.removeItem(name);
+  },
+};
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -20,13 +42,8 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-token',
-      storage: createJSONStorage(() =>
-        typeof window !== 'undefined' ? localStorage : {
-          getItem: () => null,
-          setItem: () => { },
-          removeItem: () => { },
-        }
-      ),
+      storage: createJSONStorage(() => safeStorage),
+      skipHydration: true,
     }
   )
 );

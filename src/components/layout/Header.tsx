@@ -14,16 +14,19 @@ export const Header = () => {
   const [localRole, setLocalRole] = useState<string | null>(null);
 
   useEffect(() => {
-    // zustand hydration 완료 대기
+    // zustand hydration 수동 실행
+    useAuthStore.persist.rehydrate();
     setHydrated(true);
 
     // localStorage에서 직접 토큰 읽기 (hydration 전에도 작동)
-    const storedToken = localStorage.getItem("token");
-    const storedRole = localStorage.getItem("role");
-    setLocalToken(storedToken);
-    setLocalRole(storedRole);
-    console.log("[Header] 초기화 - localStorage 토큰:", storedToken ? "있음" : "없음");
-    console.log("[Header] 초기화 - zustand 토큰:", token ? "있음" : "없음");
+    if (typeof window !== 'undefined') {
+      const storedToken = localStorage.getItem("token");
+      const storedRole = localStorage.getItem("role");
+      setLocalToken(storedToken);
+      setLocalRole(storedRole);
+      console.log("[Header] 초기화 - localStorage 토큰:", storedToken ? "있음" : "없음");
+      console.log("[Header] 초기화 - zustand 토큰:", token ? "있음" : "없음");
+    }
   }, []);
 
   // zustand 토큰/role 변경 감지
@@ -53,8 +56,25 @@ export const Header = () => {
   };
 
   if (!hydrated) {
-    console.log("[Header] hydration 대기 중");
-    return null;
+    // 서버사이드에서는 기본 헤더 렌더링
+    return (
+      <header className="h-[4.6875rem] sticky top-0 left-0 right-0 border-b-[#585858] border-b-[0.4px] pl-40 pr-40 flex justify-between items-center z-50 bg-white">
+        <div className="flex gap-20 items-center">
+          <div className="flex gap-4 items-center">
+            <Image src={Logo} alt={"Logo"} />
+            <p className="text-2xl">NDIE</p>
+          </div>
+          <Link href="/">홈</Link>
+          <Link href="/act">활동</Link>
+          <Link href="/qna">QnA</Link>
+          <Link href="/announcement">공지사항</Link>
+        </div>
+        <div className="flex gap-11 items-center">
+          <Link href="/login">로그인</Link>
+          <Link href="/signup">회원가입</Link>
+        </div>
+      </header>
+    );
   }
 
   // zustand와 localStorage 둘 중 하나라도 토큰이 있으면 로그인 상태
