@@ -1,6 +1,4 @@
-"use client";
-
-import { getStorage } from "firebase/storage";
+import { getStorage, FirebaseStorage } from "firebase/storage";
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
 import { getFirestore, Firestore } from "firebase/firestore";
@@ -16,32 +14,64 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-XYVNNJM4G4"
 };
 
-// 클라이언트 사이드에서만 Firebase 초기화
+// Lazy initialization - 실제 사용 시점에 초기화
+let _app: FirebaseApp | null = null;
+let _auth: Auth | null = null;
+let _db: Firestore | null = null;
+let _storage: FirebaseStorage | null = null;
+
 const getFirebaseApp = (): FirebaseApp | null => {
   if (typeof window === 'undefined') return null;
-  return !getApps().length ? initializeApp(firebaseConfig) : getApp();
+  if (!_app) {
+    _app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+  }
+  return _app;
 };
 
-const app = getFirebaseApp();
+// Getter functions for lazy initialization
+export const getFirebaseAuth = (): Auth | null => {
+  if (typeof window === 'undefined') return null;
+  if (!_auth) {
+    const app = getFirebaseApp();
+    if (app) _auth = getAuth(app);
+  }
+  return _auth;
+};
 
-// Auth
-export const auth: Auth | null = app ? getAuth(app) : null;
+export const getFirebaseDb = (): Firestore | null => {
+  if (typeof window === 'undefined') return null;
+  if (!_db) {
+    const app = getFirebaseApp();
+    if (app) _db = getFirestore(app);
+  }
+  return _db;
+};
 
-// Firestore
-export const db: Firestore | null = app ? getFirestore(app) : null;
+export const getFirebaseStorage = (): FirebaseStorage | null => {
+  if (typeof window === 'undefined') return null;
+  if (!_storage) {
+    const app = getFirebaseApp();
+    if (app) _storage = getStorage(app);
+  }
+  return _storage;
+};
 
-// Storage
-export const storage = app ? getStorage(app) : null;
+// 기존 코드 호환성을 위한 getter
+export const app = typeof window !== 'undefined' ? getFirebaseApp() : null;
+export const auth = typeof window !== 'undefined' ? getFirebaseAuth() : null;
+export const db = typeof window !== 'undefined' ? getFirebaseDb() : null;
+export const storage = typeof window !== 'undefined' ? getFirebaseStorage() : null;
 
 // Analytics
 export const initAnalytics = async () => {
-  if (typeof window !== 'undefined' && app) {
-    const supported = await isSupported();
-    if (supported) {
-      return getAnalytics(app);
+  if (typeof window !== 'undefined') {
+    const app = getFirebaseApp();
+    if (app) {
+      const supported = await isSupported();
+      if (supported) {
+        return getAnalytics(app);
+      }
     }
   }
   return null;
 };
-
-export { app };
