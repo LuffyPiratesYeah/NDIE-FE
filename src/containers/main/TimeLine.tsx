@@ -26,7 +26,6 @@ const defaultData: TimelineData = {
 export default function NDIETimeline() {
   const [timelineData, setTimelineData] = useState<TimelineData>(defaultData);
   const [selectedYear, setSelectedYear] = useState("2024");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
@@ -42,8 +41,6 @@ export default function NDIETimeline() {
         }
       } catch (e) {
         console.error("연혁 로드 실패:", e);
-      } finally {
-        setLoading(false);
       }
     };
     loadData();

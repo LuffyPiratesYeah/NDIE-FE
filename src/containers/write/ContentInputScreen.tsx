@@ -11,7 +11,7 @@ import UnderlineGray from "@/assets/write/underlineGray.svg";
 import UnderLine from "@/assets/write/underline.svg";
 import ImgGray from "@/assets/write/imgGraymini.svg";
 import Img from "@/assets/write/img.svg";
-import React, { RefObject, useEffect, useState } from "react";
+import React, { RefObject, useState } from "react";
 
 import { useAuthStore } from "@/store/useAuthStore";
 

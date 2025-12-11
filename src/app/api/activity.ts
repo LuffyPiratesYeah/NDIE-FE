@@ -48,7 +48,7 @@ export const CreateActivity = async (data: { title: string, content: string, ima
       message = e.message;
 
       if ('code' in e) {
-        const firebaseError = e as any;
+        const firebaseError = e as { code: string };
         switch (firebaseError.code) {
           case 'permission-denied':
             message = '권한이 없습니다. 관리자 권한을 확인해주세요.';
@@ -121,7 +121,7 @@ export const uploadImg = async (data: FormData) => {
       message = e.message;
 
       if ('code' in e) {
-        const firebaseError = e as any;
+        const firebaseError = e as { code: string };
         switch (firebaseError.code) {
           case 'storage/unauthorized':
             message = '이미지 업로드 권한이 없습니다.';

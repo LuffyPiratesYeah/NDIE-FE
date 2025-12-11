@@ -50,7 +50,7 @@ export const CreateAnnouncement = async (data: { title: string, content: string 
 
       // Firebase 에러 코드별 메시지
       if ('code' in e) {
-        const firebaseError = e as any;
+        const firebaseError = e as { code: string };
         switch (firebaseError.code) {
           case 'permission-denied':
             message = '권한이 없습니다. 관리자 권한을 확인해주세요.';
