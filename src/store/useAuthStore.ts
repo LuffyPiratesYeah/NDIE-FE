@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 
 interface AuthState {
   token: string | null;
@@ -7,43 +6,52 @@ interface AuthState {
   setToken: (token: string | null) => void;
   setRole: (role: 'ADMIN' | 'USER' | null) => void;
   setUser: (token: string | null, role: 'ADMIN' | 'USER' | null) => void;
+  loadFromStorage: () => void;
 }
 
-// 서버사이드에서 안전한 스토리지
-const noopStorage: StateStorage = {
-  getItem: () => null,
-  setItem: () => {},
-  removeItem: () => {},
-};
-
-const safeStorage: StateStorage = {
-  getItem: (name) => {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem(name);
-  },
-  setItem: (name, value) => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem(name, value);
-  },
-  removeItem: (name) => {
-    if (typeof window === 'undefined') return;
-    localStorage.removeItem(name);
-  },
-};
-
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      token: null,
-      role: null,
-      setToken: (token) => set({ token }),
-      setRole: (role) => set({ role }),
-      setUser: (token, role) => set({ token, role }),
-    }),
-    {
-      name: 'auth-token',
-      storage: createJSONStorage(() => safeStorage),
-      skipHydration: true,
+export const useAuthStore = create<AuthState>((set) => ({
+  token: null,
+  role: null,
+  setToken: (token) => {
+    set({ token });
+    if (typeof window !== 'undefined') {
+      if (token) {
+        localStorage.setItem('token', token);
+      } else {
+        localStorage.removeItem('token');
+      }
     }
-  )
-);
+  },
+  setRole: (role) => {
+    set({ role });
+    if (typeof window !== 'undefined') {
+      if (role) {
+        localStorage.setItem('role', role);
+      } else {
+        localStorage.removeItem('role');
+      }
+    }
+  },
+  setUser: (token, role) => {
+    set({ token, role });
+    if (typeof window !== 'undefined') {
+      if (token) {
+        localStorage.setItem('token', token);
+      } else {
+        localStorage.removeItem('token');
+      }
+      if (role) {
+        localStorage.setItem('role', role);
+      } else {
+        localStorage.removeItem('role');
+      }
+    }
+  },
+  loadFromStorage: () => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role') as 'ADMIN' | 'USER' | null;
+      set({ token, role });
+    }
+  },
+}));

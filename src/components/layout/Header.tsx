@@ -14,19 +14,15 @@ export const Header = () => {
   const [localRole, setLocalRole] = useState<string | null>(null);
 
   useEffect(() => {
-    // zustand hydration 수동 실행
-    useAuthStore.persist.rehydrate();
+    // localStorage에서 상태 로드
+    useAuthStore.getState().loadFromStorage();
     setHydrated(true);
 
-    // localStorage에서 직접 토큰 읽기 (hydration 전에도 작동)
-    if (typeof window !== 'undefined') {
-      const storedToken = localStorage.getItem("token");
-      const storedRole = localStorage.getItem("role");
-      setLocalToken(storedToken);
-      setLocalRole(storedRole);
-      console.log("[Header] 초기화 - localStorage 토큰:", storedToken ? "있음" : "없음");
-      console.log("[Header] 초기화 - zustand 토큰:", token ? "있음" : "없음");
-    }
+    // localStorage에서 직접 토큰 읽기
+    const storedToken = localStorage.getItem("token");
+    const storedRole = localStorage.getItem("role");
+    setLocalToken(storedToken);
+    setLocalRole(storedRole);
   }, []);
 
   // zustand 토큰/role 변경 감지
