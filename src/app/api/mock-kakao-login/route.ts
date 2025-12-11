@@ -1,5 +1,3 @@
-export const runtime = "edge";
-
 export async function GET() {
   const code = `mock-${crypto.randomUUID?.() ?? Math.random().toString(16).slice(2)}`;
   return new Response(null, {
