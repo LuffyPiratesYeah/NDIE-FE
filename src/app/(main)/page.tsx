@@ -10,8 +10,7 @@ import HomeBanner from "@/containers/main/HomeBanner";
 import TimeLine from "@/containers/main/TimeLine";
 import OrgChart from "@/containers/main/OrgChart";
 import InquiryForm from "@/containers/main/InquiryForm";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { getFirebaseDb } from "@/lib/firebase";
 
 type IntroConfig = {
   highlightWord: string;
@@ -38,6 +37,10 @@ export default function Home() {
   useEffect(() => {
     const loadConfig = async () => {
       try {
+        const db = await getFirebaseDb();
+        if (!db) return;
+        
+        const { doc, getDoc } = await import("firebase/firestore");
         const docRef = doc(db, "siteConfig", "main");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {

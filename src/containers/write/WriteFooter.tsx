@@ -33,8 +33,14 @@ export default function WriteFooter({
 
   const ensureLoggedIn = async () => {
     try {
-      const { auth } = await import("@/lib/firebase");
+      const { getFirebaseAuth } = await import("@/lib/firebase");
       const { onAuthStateChanged } = await import("firebase/auth");
+
+      const auth = await getFirebaseAuth();
+      if (!auth) {
+        alert("Firebase 인증이 초기화되지 않았습니다.");
+        return null;
+      }
 
       // 이미 유저가 있다면 즉시 반환
       if (auth.currentUser) {

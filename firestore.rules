@@ -42,18 +42,16 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN';
     }
 
-    // 조직도 컬렉션: 모두 읽기 가능, 관리자만 수정 가능
+    // 조직도 컬렉션: 모두 읽기 가능, 로그인한 사용자 수정 가능 (개발용)
     match /organization/{document} {
       allow read: if true;
-      allow create, update, delete: if request.auth != null &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN';
+      allow create, update, delete: if request.auth != null;
     }
 
-    // 사이트 설정 컬렉션: 모두 읽기 가능, 관리자만 수정 가능
+    // 사이트 설정 컬렉션: 모두 읽기 가능, 로그인한 사용자 수정 가능 (개발용)
     match /siteConfig/{document} {
       allow read: if true;
-      allow create, update, delete: if request.auth != null &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN';
+      allow create, update, delete: if request.auth != null;
     }
   }
 }

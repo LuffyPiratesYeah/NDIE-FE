@@ -1,23 +1,27 @@
-import axios, {
-  AxiosInstance,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
+
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: "/api",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   withCredentials: true,
 });
 
-// 요청 인터셉터
+// 요청 인터셉터 - Firebase Auth에서 토큰 가져오기
 axiosInstance.interceptors.request.use(
-  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    if (typeof window !== 'undefined' && window.localStorage && typeof window.localStorage.getItem === 'function') {
-      const token = window.localStorage.getItem('token');
-      if (token && config.headers) {
-        config.headers['Authorization'] = `Bearer ${token}`;
+  async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
+    try {
+      const { getFirebaseAuth } = await import("@/lib/firebase");
+      const auth = await getFirebaseAuth();
+      if (auth?.currentUser) {
+        const token = await auth.currentUser.getIdToken();
+        if (token && config.headers) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
       }
+    } catch (e) {
+      console.error("Failed to get auth token:", e);
     }
     return config;
   },

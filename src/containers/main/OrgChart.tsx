@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { getFirebaseDb } from "@/lib/firebase";
 
 type OrgNode = {
   name: string;
@@ -37,6 +36,10 @@ export default function OrgChart() {
   useEffect(() => {
     const loadData = async () => {
       try {
+        const db = await getFirebaseDb();
+        if (!db) return;
+        
+        const { doc, getDoc } = await import("firebase/firestore");
         const docRef = doc(db, "organization", "chart");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {

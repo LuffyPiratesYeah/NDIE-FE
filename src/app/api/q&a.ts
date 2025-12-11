@@ -1,11 +1,11 @@
-import { collection, addDoc } from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
+import { getFirebaseDb, getFirebaseAuth } from "@/lib/firebase";
 
 export const CreateQA = async (data: { title: string, content: string, username: string }) => {
   console.log('[CreateQA] 시작:', data);
 
   try {
     // Firestore 연결 확인
+    const db = await getFirebaseDb();
     if (!db) {
       console.error('[CreateQA] Firestore 초기화 안됨');
       return {
@@ -15,6 +15,7 @@ export const CreateQA = async (data: { title: string, content: string, username:
     }
 
     // Firebase Auth 상태 확인
+    const auth = await getFirebaseAuth();
     const currentUser = auth?.currentUser;
     console.log('[CreateQA] Firebase Auth 상태:', currentUser ? `로그인됨 (${currentUser.email})` : '로그인 안됨');
     
@@ -39,6 +40,7 @@ export const CreateQA = async (data: { title: string, content: string, username:
     console.log('[CreateQA] 저장할 데이터:', docData);
     console.log('[CreateQA] addDoc 호출 시작...');
 
+    const { collection, addDoc } = await import("firebase/firestore");
     const docRef = await addDoc(collection(db, "QNA"), docData);
     
     console.log('[CreateQA] 문서 생성 성공:', docRef.id);

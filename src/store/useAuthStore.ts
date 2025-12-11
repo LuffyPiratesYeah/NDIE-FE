@@ -1,57 +1,25 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface AuthState {
-  token: string | null;
-  role: 'ADMIN' | 'USER' | null;
-  setToken: (token: string | null) => void;
-  setRole: (role: 'ADMIN' | 'USER' | null) => void;
-  setUser: (token: string | null, role: 'ADMIN' | 'USER' | null) => void;
-  loadFromStorage: () => void;
+  uid: string | null;
+  email: string | null;
+  role: "ADMIN" | "USER" | null;
+  isLoading: boolean;
+  isInitialized: boolean;
+  setAuth: (uid: string | null, email: string | null, role: "ADMIN" | "USER" | null) => void;
+  setLoading: (loading: boolean) => void;
+  setInitialized: (initialized: boolean) => void;
+  clear: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  token: null,
+  uid: null,
+  email: null,
   role: null,
-  setToken: (token) => {
-    set({ token });
-    if (typeof window !== 'undefined') {
-      if (token) {
-        localStorage.setItem('token', token);
-      } else {
-        localStorage.removeItem('token');
-      }
-    }
-  },
-  setRole: (role) => {
-    set({ role });
-    if (typeof window !== 'undefined') {
-      if (role) {
-        localStorage.setItem('role', role);
-      } else {
-        localStorage.removeItem('role');
-      }
-    }
-  },
-  setUser: (token, role) => {
-    set({ token, role });
-    if (typeof window !== 'undefined') {
-      if (token) {
-        localStorage.setItem('token', token);
-      } else {
-        localStorage.removeItem('token');
-      }
-      if (role) {
-        localStorage.setItem('role', role);
-      } else {
-        localStorage.removeItem('role');
-      }
-    }
-  },
-  loadFromStorage: () => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      const role = localStorage.getItem('role') as 'ADMIN' | 'USER' | null;
-      set({ token, role });
-    }
-  },
+  isLoading: true,
+  isInitialized: false,
+  setAuth: (uid, email, role) => set({ uid, email, role }),
+  setLoading: (isLoading) => set({ isLoading }),
+  setInitialized: (isInitialized) => set({ isInitialized }),
+  clear: () => set({ uid: null, email: null, role: null }),
 }));

@@ -1,39 +1,32 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const setToken = useAuthStore((state) => state.setToken);
-  // const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
   const API_BASE = "/api";
 
   useEffect(() => {
-    const code = searchParams.get('code');
+    const code = searchParams.get("code");
 
     if (!code) {
-      router.replace('/login');
+      router.replace("/login");
       return;
     }
 
     const verifyLogin = async () => {
       try {
-        const res = await fetch(
-          `${API_BASE}/codeLogin`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({ code }),
-          }
-        );
+        const res = await fetch(`${API_BASE}/codeLogin`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ code }),
+        });
 
-        const authHeader = res.headers.get('Authorization');
         const text = await res.text();
         let data;
 
@@ -44,28 +37,18 @@ export default function LoginSuccessContent() {
         }
 
         if (!res.ok) {
-          const errorMessage = data?.message || '로그인 실패';
+          const errorMessage = data?.message || "로그인 실패";
           throw new Error(errorMessage);
         }
 
-        if (typeof window !== 'undefined') {
-          if (authHeader) {
-            const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
-            localStorage.setItem('token', token);
-            setToken(token);
-          } else if (data?.token) {
-            localStorage.setItem('token', data.token);
-            setToken(data.token);
-          }
-        }
-
-        router.push('/');
+        // Firebase Auth로 로그인 처리 (AuthProvider가 자동 감지)
+        router.push("/");
       } catch (error) {
-        alert(error instanceof Error ? error.message : '로그인 중 오류 발생'); // 에러 메시지 개선
+        alert(error instanceof Error ? error.message : "로그인 중 오류 발생");
       }
     };
     verifyLogin();
-  }, [API_BASE, router, searchParams, setToken]); // 의존성 배열 추가
+  }, [API_BASE, router, searchParams]);
 
   return <p>카카오 로그인 처리 중...</p>;
 }

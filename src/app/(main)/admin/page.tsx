@@ -8,31 +8,45 @@ import SiteEditor from "@/containers/admin/SiteEditor";
 
 export default function AdminPage() {
   const router = useRouter();
-  const { role } = useAuthStore();
+  const { uid, role, isLoading, isInitialized } = useAuthStore();
   const [activeTab, setActiveTab] = useState<"site" | "history" | "org">("site");
-  const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    const storedRole = localStorage.getItem("role");
-    const userRole = role || storedRole;
-    
-    if (userRole !== "ADMIN") {
-      alert("관리자 권한이 필요합니다.");
-      router.replace("/");
-      return;
+    // 초기화 완료 후 권한 체크
+    if (isInitialized && !isLoading) {
+      if (!uid || role !== "ADMIN") {
+        alert("관리자 권한이 필요합니다.");
+        router.replace("/");
+      }
     }
-    setIsAuthorized(true);
-  }, [role, router]);
+  }, [isInitialized, isLoading, uid, role, router]);
 
-  if (!isAuthorized) {
-    return <div className="flex justify-center items-center h-screen">권한 확인 중...</div>;
+  // 로딩 중
+  if (!isInitialized || isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-4" />
+          <p>권한 확인 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 권한 없음
+  if (!uid || role !== "ADMIN") {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>접근 권한이 없습니다.</p>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">관리자 페이지</h1>
-        
+
         {/* 탭 메뉴 */}
         <div className="flex gap-4 mb-8 flex-wrap">
           <button

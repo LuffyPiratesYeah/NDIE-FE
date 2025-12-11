@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { getFirebaseDb } from "@/lib/firebase";
 
 type TimelineEntry = {
   date: string;
@@ -32,6 +31,10 @@ export default function NDIETimeline() {
   useEffect(() => {
     const loadData = async () => {
       try {
+        const db = await getFirebaseDb();
+        if (!db) return;
+        
+        const { doc, getDoc } = await import("firebase/firestore");
         const docRef = doc(db, "history", "timeline");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {

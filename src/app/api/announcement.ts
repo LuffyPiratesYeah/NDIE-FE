@@ -1,11 +1,11 @@
-import { collection, addDoc } from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
+import { getFirebaseDb, getFirebaseAuth } from "@/lib/firebase";
 
 export const CreateAnnouncement = async (data: { title: string, content: string }) => {
   console.log('[CreateAnnouncement] 시작:', data);
 
   try {
     // Firestore 연결 확인
+    const db = await getFirebaseDb();
     if (!db) {
       console.error('[CreateAnnouncement] Firestore 초기화 안됨');
       return {
@@ -15,6 +15,7 @@ export const CreateAnnouncement = async (data: { title: string, content: string 
     }
 
     // Firebase Auth 상태 확인
+    const auth = await getFirebaseAuth();
     const currentUser = auth?.currentUser;
     console.log('[CreateAnnouncement] Firebase Auth 상태:', currentUser ? `로그인됨 (${currentUser.email})` : '로그인 안됨');
     
@@ -34,6 +35,7 @@ export const CreateAnnouncement = async (data: { title: string, content: string 
     };
 
     console.log('[CreateAnnouncement] addDoc 호출 시작...');
+    const { collection, addDoc } = await import("firebase/firestore");
     const docRef = await addDoc(collection(db, "announcement"), docData);
     
     console.log('[CreateAnnouncement] 문서 생성 성공:', docRef.id);

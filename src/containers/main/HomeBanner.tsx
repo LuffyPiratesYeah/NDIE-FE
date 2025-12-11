@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { getFirebaseDb } from "@/lib/firebase";
 
 type BannerConfig = {
   titlePrefix: string;
@@ -27,6 +26,10 @@ export default function HomeBanner() {
   useEffect(() => {
     const loadConfig = async () => {
       try {
+        const db = await getFirebaseDb();
+        if (!db) return;
+        
+        const { doc, getDoc } = await import("firebase/firestore");
         const docRef = doc(db, "siteConfig", "main");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists() && docSnap.data().banner) {
