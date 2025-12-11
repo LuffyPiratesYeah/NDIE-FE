@@ -6,7 +6,7 @@ export const CreateAnnouncement = async (data: { title: string, content: string 
 
   try {
     // Firestore 연결 확인
-    if (!db || typeof db.type === 'undefined') {
+    if (!db) {
       console.error('[CreateAnnouncement] Firestore 초기화 안됨');
       return {
         status: 500 as const,

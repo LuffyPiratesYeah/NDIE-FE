@@ -1,3 +1,5 @@
+"use client";
+
 import { getStorage } from "firebase/storage";
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
@@ -14,74 +16,26 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-XYVNNJM4G4"
 };
 
-// Initialize Firebase App (싱글톤)
-let app: FirebaseApp;
-if (typeof window !== 'undefined') {
-  try {
-    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-    console.log('[Firebase] App 초기화 완료:', app.name);
-  } catch (error) {
-    console.error('[Firebase] App 초기화 실패:', error);
-    throw error;
-  }
-} else {
-  app = {} as FirebaseApp;
-}
+// 클라이언트 사이드에서만 Firebase 초기화
+const getFirebaseApp = (): FirebaseApp | null => {
+  if (typeof window === 'undefined') return null;
+  return !getApps().length ? initializeApp(firebaseConfig) : getApp();
+};
 
-// Initialize Auth
-let auth: Auth | any;
-if (typeof window !== 'undefined') {
-  try {
-    auth = getAuth(app);
-    console.log('[Firebase] Auth 초기화 완료');
-  } catch (error) {
-    console.error('[Firebase] Auth 초기화 실패:', error);
-    auth = {} as any;
-  }
-} else {
-  auth = {} as any;
-}
+const app = getFirebaseApp();
 
-// Initialize Firestore
-let db: Firestore | any;
-if (typeof window !== 'undefined') {
-  try {
-    db = getFirestore(app);
-    console.log('[Firebase] Firestore 초기화 완료');
+// Auth
+export const auth: Auth | null = app ? getAuth(app) : null;
 
-    // 연결 테스트
-    import('firebase/firestore').then(({ collection, getDocs, limit, query }) => {
-      const testQuery = query(collection(db, 'QNA'), limit(1));
-      getDocs(testQuery)
-        .then(() => console.log('[Firebase] Firestore 연결 테스트 성공 ✅'))
-        .catch((err) => console.error('[Firebase] Firestore 연결 테스트 실패 ❌:', err));
-    });
-  } catch (error) {
-    console.error('[Firebase] Firestore 초기화 실패:', error);
-    db = {} as any;
-  }
-} else {
-  db = {} as any;
-}
+// Firestore
+export const db: Firestore | null = app ? getFirestore(app) : null;
 
-// Initialize Storage
-let storage: any;
-if (typeof window !== 'undefined') {
-  try {
-    storage = getStorage(app);
-    console.log('[Firebase] Storage 초기화 완료');
-  } catch (error) {
-    console.error('[Firebase] Storage 초기화 실패:', error);
-    storage = {} as any;
-  }
-} else {
-  storage = {} as any;
-}
+// Storage
+export const storage = app ? getStorage(app) : null;
 
-export { app, auth, db, storage };
-
+// Analytics
 export const initAnalytics = async () => {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && app) {
     const supported = await isSupported();
     if (supported) {
       return getAnalytics(app);
@@ -89,3 +43,5 @@ export const initAnalytics = async () => {
   }
   return null;
 };
+
+export { app };

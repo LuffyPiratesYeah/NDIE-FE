@@ -7,7 +7,7 @@ export const CreateActivity = async (data: { title: string, content: string, ima
 
   try {
     // Firestore 연결 확인
-    if (!db || typeof db.type === 'undefined') {
+    if (!db) {
       console.error('[CreateActivity] Firestore 초기화 안됨');
       return {
         status: 500 as const,
@@ -71,7 +71,7 @@ export const uploadImg = async (data: FormData) => {
 
   try {
     // Storage 연결 확인
-    if (!storage || typeof storage.app === 'undefined') {
+    if (!storage) {
       console.error('[uploadImg] Storage 초기화 안됨');
       return {
         url: null,

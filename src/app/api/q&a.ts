@@ -6,7 +6,7 @@ export const CreateQA = async (data: { title: string, content: string, username:
 
   try {
     // Firestore 연결 확인
-    if (!db || typeof db.type === 'undefined') {
+    if (!db) {
       console.error('[CreateQA] Firestore 초기화 안됨');
       return {
         status: 500 as const,
