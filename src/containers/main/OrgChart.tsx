@@ -1,48 +1,53 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 type OrgNode = {
   name: string;
   level: number;
   child?: OrgNode[];
 };
-const orgTreeData: OrgNode = {
+
+const defaultData: OrgNode = {
   name: "root",
   level: 0,
   child: [{
-      name: "child",
-      level: 1,
-      child: [
-        {
-          name: "child2",
-          level: 2
-        },{
-          name: "child2",
-          level: 2
-        },{
-          name: "child2",
-          level: 2,
-          child: [
-            {
-              name: "child3.1",
-              level: 3
-            },
-            {
-              name: "child3.2",
-              level: 3
-            },
-            {
-              name: "child3.3",
-              level: 3
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-
+    name: "child",
+    level: 1,
+    child: [
+      { name: "child2", level: 2 },
+      { name: "child2", level: 2 },
+      {
+        name: "child2",
+        level: 2,
+        child: [
+          { name: "child3.1", level: 3 },
+          { name: "child3.2", level: 3 },
+          { name: "child3.3", level: 3 }
+        ]
+      }
+    ]
+  }]
+};
 
 export default function OrgChart() {
+  const [orgTreeData, setOrgTreeData] = useState<OrgNode>(defaultData);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const docRef = doc(db, "organization", "chart");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setOrgTreeData(docSnap.data() as OrgNode);
+        }
+      } catch (e) {
+        console.error("조직도 로드 실패:", e);
+      }
+    };
+    loadData();
+  }, []);
   return (
     <div className="flex flex-col items-center py-12">
       <OrgNodeComponent node={orgTreeData} />

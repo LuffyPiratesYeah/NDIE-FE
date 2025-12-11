@@ -1,24 +1,38 @@
 import Modal from "@/components/layout/Modal";
 import Image from "next/image";
 import Plus from "@/assets/write/plus.svg";
-import React, {useRef} from "react";
-import {useModalStore} from "@/store/modal";
-import {CreateActivity, uploadImg} from "@/app/api/activity";
-import {useLoadingStore} from "@/store/loading";
-import {useRouter} from "next/navigation";
+import React, { useRef } from "react";
+import { useModalStore } from "@/store/modal";
+import { CreateActivity, uploadImg } from "@/app/api/activity";
+import { useLoadingStore } from "@/store/loading";
+import { useRouter } from "next/navigation";
+
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function WriteModalScreen({
   title,
   content
 }: {
-  title : string,
-  content : string
+  title: string,
+  content: string
 }) {
-  const {isModalOpen, toggleModal} = useModalStore();
+  const { isModalOpen, toggleModal } = useModalStore();
   const [img, setImg] = React.useState("");
   const fileRef = useRef<HTMLInputElement | null>(null);
-  const {setIsLoadingFalse, setIsLoadingTrue} = useLoadingStore();
-  const changeFile = async (event : React.ChangeEvent<HTMLInputElement> ) => {
+  const { setIsLoadingFalse, setIsLoadingTrue } = useLoadingStore();
+  const router = useRouter();
+  const { role } = useAuthStore();
+
+  const ensureAdmin = () => {
+    if (role !== 'ADMIN') {
+      alert("관리자 권한이 필요합니다.");
+      router.push("/");
+      return false;
+    }
+    return true;
+  };
+
+  const changeFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) {
       return;
     }
@@ -33,26 +47,30 @@ export default function WriteModalScreen({
     data.append("file", file);
     const upload = async () => {
       const res = await uploadImg(data);
-      if(res){
+      if (res?.url) {
         setImg(res.url);
-        setIsLoadingFalse()
+      } else {
+        alert(res?.message || "이미지 업로드에 실패했습니다.");
       }
+      setIsLoadingFalse();
     }
     setIsLoadingTrue()
     await upload()
   };
 
-  const router = useRouter();
   const handleSubmit = async () => {
+    if (!ensureAdmin()) return;
     setIsLoadingTrue();
-    const status = await CreateActivity({title, content, image: img});
-    if(status === 200){
+    const result = await CreateActivity({ title, content, image: img });
+    setIsLoadingFalse();
+    if (result.status === 200) {
       toggleModal();
-      setIsLoadingFalse();
-      router.push("/activity");
+      router.push("/act");
+    } else {
+      alert(result.message || "활동 작성에 실패했습니다.");
     }
   };
-  return(
+  return (
     <Modal toggleModal={toggleModal} isOpen={isModalOpen}>
       <div
         onClick={() => {
@@ -72,19 +90,19 @@ export default function WriteModalScreen({
       </div>
       <div className={"flex gap-4 justify-center align-center mt-4"}>
         <button
-          onClick={()=> toggleModal()}
+          onClick={() => toggleModal()}
           className="cursor-pointer font-bold h-[2.5rem] w-[6.5rem] rounded-[0.625rem] border-2 border-[#8c8c8c] text-sm flex justify-center items-center"
         >
           취소
         </button>
         <button
-          onClick={()=>handleSubmit()}
+          onClick={() => handleSubmit()}
           className={" bg-[#ED9735] text-white font-bold cursor-pointer h-[2.5rem] w-[6.5rem] rounded-[0.625rem] border-2 border-[#ED9735] text-sm flex justify-center items-center"}
         >
           등록하기
         </button>
       </div>
-      <input ref={fileRef} type={"file"} onChange={(event)=>changeFile(event)} style={{display: "none"}} />
+      <input ref={fileRef} type={"file"} onChange={(event) => changeFile(event)} style={{ display: "none" }} />
     </Modal>
   )
 }

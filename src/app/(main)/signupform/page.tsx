@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function SignupForm() {
   // const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -11,9 +11,6 @@ export default function SignupForm() {
   const [day, setDay] = useState<number>(1);
   const [daysInMonth, setDaysInMonth] = useState<number[]>([]);
 
-  // const NEXT_PUBLIC_API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-  const NEXT_PUBLIC_API_BASE = "https://backend.ndie.or.kr";
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,11 +18,8 @@ export default function SignupForm() {
   const [gender, setGender] = useState('');
   const [location, setLocation] = useState('');
 
-  const [isEmailSent, setIsEmailSent] = useState(false);
-  const [code, setCode] = useState('');
-  // const [isEmailVerified, setIsEmailVerified] = useState(false);
-
   const router = useRouter();
+  const setToken = useAuthStore((state) => state.setToken);
 
   // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const file = e.target.files?.[0];
@@ -50,54 +44,61 @@ export default function SignupForm() {
     updateDaysInMonth(year, month);
   }, [year, month]);
 
-  const handleSendVerificationEmail = async () => {
-    try {
-      
-      const res = await fetch(`${NEXT_PUBLIC_API_BASE}/email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      }); 
-      
-      if (!res.ok) throw new Error('인증 요청 실패');
-      alert('인증 메일이 전송되었습니다.');
-      setIsEmailSent(true);
-    } catch (err) {
-      alert(err);
-    }
-  };
-
   const handleSubmit = async () => {
     if (password !== repassword) return alert('비밀번호가 일치하지 않습니다.');
 
     try {
+      const { createUserWithEmailAndPassword, updateProfile } = await import("firebase/auth");
+      const { doc, setDoc } = await import("firebase/firestore");
+      const { auth, db } = await import("@/lib/firebase");
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await updateProfile(user, {
+        displayName: name
+      });
+
       const birthDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      
-      const res = await axios.post(`${NEXT_PUBLIC_API_BASE}/signup`, {
+
+      await setDoc(doc(db, "users", user.uid), {
         name,
         email,
-        code,
-        password,
-        rePassword: repassword,
         gender,
         birthDate,
         activityArea: location,
+        role: "USER",
+        createdAt: new Date().toISOString()
       });
 
-      if(res.status !== 200) {
-        alert('회원가입 성공!');
-        router.push('/');
+      // 회원가입 후 자동 로그인 처리
+      const token = await user.getIdToken();
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", token);
       }
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
+      setToken(token);
 
+      alert('회원가입 성공!');
+      router.replace('/');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.error(err);
+      let message = err?.message || '회원가입 중 오류가 발생했습니다.';
+      if (err?.code === 'auth/configuration-not-found') {
+        message = '이메일/비밀번호 회원가입이 아직 설정되지 않았습니다. Firebase Authentication 설정을 확인해주세요.';
+      } else if (err?.code === 'auth/email-already-in-use') {
+        message = '이미 가입된 이메일입니다. 로그인 화면으로 이동합니다.';
+        alert(message);
+        router.push('/login');
+        return;
+      } else if (err?.code === 'auth/weak-password') {
+        message = '비밀번호가 너무 약합니다. 6자 이상으로 설정해주세요.';
       }
-      
-      alert('회원가입 중 오류가 발생했습니다.');
+      alert(message);
     }
   };
   return (
-    
+
     <div className="max-w-md mx-auto py-10 px-4">
 
 
@@ -110,30 +111,10 @@ export default function SignupForm() {
             placeholder="이메일"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 border px-4 py-2 rounded-l"
+            className="w-full border px-4 py-2"
             disabled={false}
           />
-          <button
-            onClick={handleSendVerificationEmail}
-            disabled={isEmailSent || !email}
-            className="hover-pointer bg-[#F28C28] text-white px-4 rounded-r"
-          >
-            {isEmailSent ? '전송됨' : '인증 요청'}
-          </button>
         </div>
-
-        {/*{isEmailSent && !isEmailVerified && (*/}
-        {isEmailSent && (
-          <div className="flex space-x-2 mt-2">
-            <input
-              type="text"
-              placeholder="인증번호 입력"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              className="flex-1 border px-4 py-2"
-            />
-          </div>
-        )}
 
         <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="비밀번호" className="w-full border px-4 py-2" />
         <input value={repassword} onChange={(e) => setRePassword(e.target.value)} type="password" placeholder="비밀번호 확인" className="w-full border px-4 py-2" />

@@ -11,10 +11,12 @@ import UnderlineGray from "@/assets/write/underlineGray.svg";
 import UnderLine from "@/assets/write/underline.svg";
 import ImgGray from "@/assets/write/imgGraymini.svg";
 import Img from "@/assets/write/img.svg";
-import React, {RefObject, useEffect, useState} from "react";
+import React, { RefObject, useEffect, useState } from "react";
+
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function ContentInputScreen(
-  {title,
+  { title,
     content,
     selectedOption,
     setContent,
@@ -24,20 +26,21 @@ export default function ContentInputScreen(
     addText,
     contentRef
   }:
-  {title : string,
-    content : string,
-    selectedOption : string,
-    setContent : React.Dispatch<React.SetStateAction<string>>,
-    setSelectedOption : React.Dispatch<React.SetStateAction<string>>,
-    setTitle : React.Dispatch<React.SetStateAction<string>>,
-    fileRef: RefObject<HTMLInputElement | null>;
-    addText : (text : string, index : number) => void,
-    contentRef : RefObject<HTMLTextAreaElement | null>
-  }
+    {
+      title: string,
+      content: string,
+      selectedOption: string,
+      setContent: React.Dispatch<React.SetStateAction<string>>,
+      setSelectedOption: React.Dispatch<React.SetStateAction<string>>,
+      setTitle: React.Dispatch<React.SetStateAction<string>>,
+      fileRef: RefObject<HTMLInputElement | null>;
+      addText: (text: string, index: number) => void,
+      contentRef: RefObject<HTMLTextAreaElement | null>
+    }
 ) {
 
-  const handleDown = (e : React.KeyboardEvent)=>{
-    if(e.key === 'Tab'){
+  const handleDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Tab') {
       e.preventDefault();
       const textarea = contentRef.current;
       if (!textarea) return;
@@ -52,13 +55,13 @@ export default function ContentInputScreen(
       textarea.setSelectionRange(start + 4, start + 4);
     }
   }
-  const handleInput = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (!contentRef.current) return;
     setContent(e.target.value)
     smart(e);
   }
-  const smart = (event : React.ChangeEvent<HTMLTextAreaElement>) => {
-    const {value, selectionStart} = event.target;
+  const smart = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value, selectionStart } = event.target;
     let updatedValue = value;
 
     const match = /<([\w가-힣]+)>$/.exec(value.slice(0, selectionStart));
@@ -85,35 +88,10 @@ export default function ContentInputScreen(
   const [under, setUnder] = useState(true);
   const [cancel, setCancel] = useState(true);
   const [img, setImg] = useState(true);
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsAdmin(parseJwt(token));
-    }
-  }, []);
-  function parseJwt(token: string): boolean | null {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
-          .join('')
-      );
+  const { role } = useAuthStore();
+  const isAdmin = role === 'ADMIN';
 
-      const data = JSON.parse(jsonPayload);
-      if (data) {
-        return data.role === "ROLE_ADMIN";
-      }
-      return null;
-    } catch {
-      
-      return null;
-    }
-  }
   return (
     <div className="w-full h-full gap-4 bg-[#ffffff] flex justify-center flex-col pl-15 pr-15 pt-10 pb-10 items-center">
       <section className={"w-full flex items-center justify-start"}>
@@ -122,7 +100,7 @@ export default function ContentInputScreen(
             <option disabled hidden value={""}>카테고리</option>
             {isAdmin && <option value={"공지사항"}>공지사항</option>}
             <option value={"Q&A"}>Q&A</option>
-            <option value={"활동"}>활동</option>
+            {isAdmin && <option value={"활동"}>활동</option>}
           </select>
           <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2">
             <Image src={ArrowBottom} alt={"ArrowBottom"} />
@@ -133,7 +111,7 @@ export default function ContentInputScreen(
         className={"w-full h-12 text-3xl font-semibold mb-4 outline-none"}
         placeholder={"제목을 입력해주세요"}
         value={title}
-        onChange={(e)=>setTitle(e.target.value)}
+        onChange={(e) => setTitle(e.target.value)}
         spellCheck="false"
       />
       <div className="w-full overflow-scroll flex justify-center border-y-[1.5px] border-[#838383]  select-none">
@@ -230,11 +208,11 @@ export default function ContentInputScreen(
       </div>
       <textarea
         className={"w-full h-full resize-none outline-none"}
-        onKeyDown={(e)=>handleDown(e)}
+        onKeyDown={(e) => handleDown(e)}
         placeholder={"내용을 입력해주세요"}
         value={content}
         ref={contentRef}
-        onChange={(e)=>{
+        onChange={(e) => {
           handleInput(e)
         }}
         spellCheck="false"

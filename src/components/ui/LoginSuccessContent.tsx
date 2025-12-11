@@ -9,7 +9,7 @@ export default function LoginSuccessContent() {
   const searchParams = useSearchParams();
   const setToken = useAuthStore((state) => state.setToken);
   // const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-  const API_BASE = "https://ndie-be-985895714915.europe-west1.run.app";
+  const API_BASE = "/api";
 
   useEffect(() => {
     const code = searchParams.get('code');
@@ -48,13 +48,15 @@ export default function LoginSuccessContent() {
           throw new Error(errorMessage);
         }
 
-        if (authHeader) {
-          const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
-          localStorage.setItem('token', token);
-          setToken(token);
-        } else if (data?.token) {
-          localStorage.setItem('token', data.token);
-          setToken(data.token);
+        if (typeof window !== 'undefined') {
+          if (authHeader) {
+            const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
+            localStorage.setItem('token', token);
+            setToken(token);
+          } else if (data?.token) {
+            localStorage.setItem('token', data.token);
+            setToken(data.token);
+          }
         }
 
         router.push('/');

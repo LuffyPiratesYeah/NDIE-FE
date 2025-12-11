@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "@/lib/polyfills/storage";
+import FirebaseAnalytics from "@/components/FirebaseAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 // app/layout.tsx
-export const metadata : Metadata = {
+export const metadata: Metadata = {
   title: {
     default: "NDIE",
     template: "%s | NDIE", // 각 페이지 제목 뒤에 붙는 기본 이름
@@ -61,17 +63,18 @@ export const metadata : Metadata = {
 };
 
 export default function RootLayout({
-                                     children,
-                                   }: Readonly<{
+  children,
+}: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="ko">
-    <body
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-    >
-    {children}
-    </body>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <FirebaseAnalytics />
+        {children}
+      </body>
     </html>
   );
 }
