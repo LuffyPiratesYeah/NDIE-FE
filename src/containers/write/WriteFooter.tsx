@@ -51,7 +51,7 @@ export default function WriteFooter({
       console.log('[WriteFooter] Firebase Auth 상태 복원 대기 중...');
 
       // 없다면 상태 변화를 기다림 (최대 10초로 증가)
-      return new Promise<any>((resolve) => {
+      return new Promise<{ displayName?: string | null; email?: string | null } | null>((resolve) => {
         let resolved = false;
         
         const timeout = setTimeout(() => {

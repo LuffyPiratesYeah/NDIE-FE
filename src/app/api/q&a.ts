@@ -55,7 +55,7 @@ export const CreateQA = async (data: { title: string, content: string, username:
 
       // Firebase 에러 코드별 메시지
       if ('code' in e) {
-        const firebaseError = e as any;
+        const firebaseError = e as { code: string };
         switch (firebaseError.code) {
           case 'permission-denied':
             message = '권한이 없습니다. 로그인 상태를 확인해주세요.';

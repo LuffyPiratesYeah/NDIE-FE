@@ -3,7 +3,7 @@
 
 if (typeof globalThis !== 'undefined' && typeof globalThis.localStorage !== 'undefined') {
   // Check if localStorage exists but doesn't have proper methods (Node.js 25+ issue)
-  const ls = globalThis.localStorage as any;
+  const ls = globalThis.localStorage as { getItem?: unknown };
   if (typeof ls.getItem !== 'function') {
     // Create a proper localStorage-like object
     const storage = new Map<string, string>();
