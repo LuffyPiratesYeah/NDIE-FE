@@ -14,7 +14,7 @@ const FooterButton = ({children}:FooterButtonProps) => {
 }
 export const Footer = () => {
   return (
-    <footer className="h-[36.25rem] w-full bg-[#001246] pl-40 pr-40 flex justify-between text-white items-center text-sm">
+    <footer className="h-[36.25rem] w-full bg-gray-500 pl-40 pr-40 flex justify-between text-white items-center text-sm">
       <ul className="flex gap-4 flex-col">
         <li>부산광역시 동래구 온천천로471번가길 40</li>
         <li>대표이사 이성철</li>
@@ -37,7 +37,7 @@ export const Footer = () => {
         <li>NDIE 디지털과 포용성 네트워크</li>
         <li>NDIE Network for Digital Inclusion and Empowerment</li>
       </ul>
-      <Image src={Logo} alt={"Logo"} className="h-full w-1/5" />
+      <Image src={Logo} alt={"Logo"} className="h-full w-2/5" />
     </footer>
   )
 }
