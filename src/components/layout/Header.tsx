@@ -27,7 +27,7 @@ export const Header = () => {
       <header className="h-[4.6875rem] sticky top-0 left-0 right-0 border-b-[#585858] border-b-[0.4px] pl-40 pr-40 flex justify-between items-center z-50 bg-white">
         <div className="flex gap-20 items-center">
           <div className="flex gap-4 items-center">
-            <Image src={Logo} alt="Logo" />
+            <Image src={Logo} alt="Logo" width={40} height={40} className="object-contain -translate-y-1" />
             <p className="text-2xl">NDIE</p>
           </div>
           <Link href="/">홈</Link>
@@ -44,10 +44,9 @@ export const Header = () => {
 
   return (
     <header className="h-[4.6875rem] sticky top-0 left-0 right-0 border-b-[#585858] border-b-[0.4px] pl-40 pr-40 flex justify-between items-center z-50 bg-white">
-      <div className="flex gap-20 items-center">
+      <div className="flex gap-15 items-center">
         <div className="flex gap-4 items-center">
-          <Image src={Logo} alt="Logo" />
-          <p className="text-2xl">NDIE</p>
+          <Image src={Logo} alt="Logo" width={200} height={200} className="object-contain -translate-y-2" />
         </div>
         <Link href="/">홈</Link>
         <Link href="/act">활동</Link>
