@@ -28,7 +28,7 @@ export default function HomeBanner() {
       try {
         const db = await getFirebaseDb();
         if (!db) return;
-        
+
         const { doc, getDoc } = await import("firebase/firestore");
         const docRef = doc(db, "siteConfig", "main");
         const docSnap = await getDoc(docRef);
@@ -43,18 +43,18 @@ export default function HomeBanner() {
   }, []);
 
   return (
-    <div className={`absolute top-1/2 -translate-y-1/2 z-1 bg-white/50 h-[40rem] left-[10rem] right-[10rem] 
-                     rounded-4xl flex flex-col justify-center items-center text-center px-4 overflow-hidden`}>
+    <div className={`absolute top-1/2 -translate-y-1/2 z-1 bg-white/50 min-h-[30rem] md:h-[40rem] left-4 right-4 md:left-[10rem] md:right-[10rem] 
+                     rounded-3xl md:rounded-4xl flex flex-col justify-center items-center text-center px-4 overflow-hidden py-8 md:py-0`}>
       <div className="z-10">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-2 flex items-end justify-center gap-2">
-          <p className="mb-5 w-[10rem] text-center">{config.titlePrefix}</p>
-          <span 
-            className="font-extrabold text-[8rem] align-bottom"
+        <h1 className="text-xl sm:text-3xl md:text-4xl font-semibold mb-2 flex flex-col md:flex-row items-center md:items-end justify-center gap-2">
+          <p className="mb-2 md:mb-5 w-auto md:w-[10rem] text-center">{config.titlePrefix}</p>
+          <span
+            className="font-extrabold text-6xl md:text-[8rem] align-bottom leading-none"
             style={{ color: config.highlightColor }}
           >
             {config.titleHighlight}
           </span>
-          <p className="mb-5 w-[10rem] text-center">{config.titleSuffix}</p>
+          <p className="mb-2 md:mb-5 w-auto md:w-[10rem] text-center">{config.titleSuffix}</p>
         </h1>
         <p className="text-gray-700 mt-4 whitespace-pre-line">
           {config.descriptionKo}

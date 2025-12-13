@@ -38,7 +38,7 @@ export default function OrgChart() {
       try {
         const db = await getFirebaseDb();
         if (!db) return;
-        
+
         const { doc, getDoc } = await import("firebase/firestore");
         const docRef = doc(db, "organization", "chart");
         const docSnap = await getDoc(docRef);
@@ -52,25 +52,27 @@ export default function OrgChart() {
     loadData();
   }, []);
   return (
-    <div className="flex flex-col items-center py-12">
-      <OrgNodeComponent node={orgTreeData} />
+    <div className="flex flex-col items-center py-12 w-full overflow-x-auto">
+      <div className="min-w-fit px-4">
+        <OrgNodeComponent node={orgTreeData} />
+      </div>
     </div>
   );
 }
 type orgNodeComponentProps = {
   node: OrgNode;
 }
-const OrgNodeComponent = ({node}:orgNodeComponentProps) => {
+const OrgNodeComponent = ({ node }: orgNodeComponentProps) => {
 
   return (
     <div className="flex flex-col items-center gap-4 text-2xl">
-      <div className={`w-[12.5rem] h-[5rem] border-2 ${node.level == 0 ? "bg-[#ED9735] border-[#BD894D]":node.level==1?"bg-[#F4AA55] border-[#ED9735]":node.level == 2?"bg-[#FCC07C] border-[#F4AA55]":"bg-[#FFFFFF] border-[#FCC07C]"} flex justify-center items-center rounded-md`}>
+      <div className={`w-[12.5rem] h-[5rem] border-2 ${node.level == 0 ? "bg-[#ED9735] border-[#BD894D]" : node.level == 1 ? "bg-[#F4AA55] border-[#ED9735]" : node.level == 2 ? "bg-[#FCC07C] border-[#F4AA55]" : "bg-[#FFFFFF] border-[#FCC07C]"} flex justify-center items-center rounded-md`}>
         {node.name}
       </div>
-      <div className={`flex ${node.level == 2 ? 'flex-col' :  'flex-row gap-6'}`}>
-      {node.child?.map((child: OrgNode,index) => {
-        return <OrgNodeComponent key={index} node={child} />
-      })}
+      <div className={`flex ${node.level == 2 ? 'flex-col' : 'flex-row gap-6'}`}>
+        {node.child?.map((child: OrgNode, index) => {
+          return <OrgNodeComponent key={index} node={child} />
+        })}
       </div>
     </div>
   )
