@@ -5,8 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/ui/loading';
 
+type ListItem = {
+  id: string | number;
+  title: string;
+  username?: string;
+  views?: number;
+  createdAt: string;
+};
+
 type ListboxProps = {
-  item: { id: string | number; title: string; username: string; views: number; createdAt: string }[];
+  item: ListItem[];
   datas: string;
   name: string;
 };
@@ -14,14 +22,12 @@ type ListboxProps = {
 export default function Listbox({ item, datas, name }: ListboxProps) {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredItems, setFilteredItems] = useState(item);
-  const [hasSearched, setHasSearched] = useState(false); // 🔸 추가
+  const [filteredItems, setFilteredItems] = useState<ListItem[]>(item);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = () => {
     setHasSearched(true);
-    const filtered = item.filter((i) =>
-      i.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filtered = item.filter((i) => i.title.toLowerCase().includes(searchTerm.toLowerCase()));
     setFilteredItems(filtered);
   };
 
@@ -37,8 +43,10 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
     if (searchTerm.trim() === '') {
       setFilteredItems(item);
       setHasSearched(false);
+    } else if (hasSearched) {
+      setFilteredItems(item.filter((i) => i.title.toLowerCase().includes(searchTerm.toLowerCase())));
     }
-  }, [searchTerm, item]);
+  }, [searchTerm, item, hasSearched]);
 
   const deslist = (id: string | number) => {
     sessionStorage.setItem('name', name);
@@ -51,21 +59,23 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
     router.push(`/${route}/${id}`);
   };
 
-  return (
-    <div className="w-full px-4">
-      <div className="mb-7 flex flex-row items-center justify-between">
-        <p className="text-sm font-semibold">전체 {filteredItems.length} 건</p>
+  const hasResults = Array.isArray(filteredItems) && filteredItems.length > 0;
 
-        <div className="flex flex-row gap-2">
+  return (
+    <div className="w-full">
+      <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <p className="text-sm font-semibold text-gray-700">전체 {filteredItems.length} 건</p>
+
+        <div className="flex w-full flex-col gap-2 sm:flex-row md:w-auto">
           <input
             type="text"
-            className="bg-[#F7F7F7] border border-[#DCDCDC] rounded-[1vh] w-[16vh] h-[3.5vh] text-center outline-none"
+            className="h-11 w-full rounded-lg border border-[#DCDCDC] bg-[#F7F7F7] px-3 text-sm outline-none sm:w-64"
             placeholder="제목 검색"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button
-            className="bg-[#ED9735] w-[8vh] h-[3.5vh] rounded-[1vh] text-white"
+            className="h-11 w-full rounded-lg bg-[#ED9735] px-4 text-sm font-semibold text-white sm:w-auto"
             onClick={handleSearch}
           >
             검색
@@ -74,31 +84,65 @@ export default function Listbox({ item, datas, name }: ListboxProps) {
       </div>
 
       <hr className="border border-black my-1" />
-      <div className="grid grid-cols-5 text-center font-semibold py-2 border-b border-gray-400">
-        <p>번호</p>
-        <p>제목</p>
-        <p>작성자</p>
-        <p>등록일</p>
-        <p>조회</p>
-      </div>
-
       {Array.isArray(filteredItems) ? (
-        filteredItems.map((i, index) => (
-          <div
-            key={i.id}
-            className="grid grid-cols-5 text-center py-2 border-b border-gray-200 text-sm cursor-pointer"
-            onClick={() => deslist(i.id)}
-          >
-            <p>{filteredItems.length - index}</p>
-            <p className="truncate">{i.title}</p>
-            <p>{i.username || '관리자'}</p>
-            <p>{formatDate(i.createdAt)}</p>
-            <p>{i.views || 0}</p>
+        <>
+          <div className="hidden md:grid md:grid-cols-5 md:text-center md:text-sm md:font-semibold md:py-2 md:border-b md:border-gray-400">
+            <p>번호</p>
+            <p>제목</p>
+            <p>작성자</p>
+            <p>등록일</p>
+            <p>조회</p>
           </div>
-        ))
+
+          <div className="hidden md:block">
+            {hasResults ? (
+              filteredItems.map((i, index) => (
+                <div
+                  key={i.id}
+                  className="grid grid-cols-5 cursor-pointer items-center border-b border-gray-200 py-3 text-center text-sm hover:bg-gray-50"
+                  onClick={() => deslist(i.id)}
+                >
+                  <p>{filteredItems.length - index}</p>
+                  <p className="truncate">{i.title}</p>
+                  <p>{i.username || '관리자'}</p>
+                  <p>{formatDate(i.createdAt)}</p>
+                  <p>{i.views || 0}</p>
+                </div>
+              ))
+            ) : (
+              <div className="py-6 text-center text-gray-500">검색 결과가 없습니다.</div>
+            )}
+          </div>
+
+          <div className="flex flex-col divide-y divide-gray-200 md:hidden">
+            {hasResults ? (
+              filteredItems.map((i, index) => (
+                <button
+                  key={i.id}
+                  className="flex flex-col items-start gap-2 py-3 text-left"
+                  onClick={() => deslist(i.id)}
+                >
+                  <div className="flex w-full items-center justify-between gap-3">
+                    <span className="text-xs text-gray-500">#{filteredItems.length - index}</span>
+                    <span className="text-xs text-gray-400">{formatDate(i.createdAt)}</span>
+                  </div>
+                  <p className="w-full text-base font-semibold text-black">{i.title}</p>
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
+                    <span>{i.username || '관리자'}</span>
+                    <span>조회 {i.views || 0}</span>
+                  </div>
+                </button>
+              ))
+            ) : (
+              <div className="py-6 text-center text-gray-500">검색 결과가 없습니다.</div>
+            )}
+          </div>
+        </>
       ) : hasSearched ? (
-        <div className="text-center py-4 text-gray-500">검색 결과가 없습니다.</div>
-      ) : <Loading />}
+        <div className="py-4 text-center text-gray-500">검색 결과가 없습니다.</div>
+      ) : (
+        <Loading />
+      )}
     </div>
   );
 }

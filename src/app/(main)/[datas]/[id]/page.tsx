@@ -24,8 +24,7 @@ export default function DetailPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [item, setItem] = useState<any>(null);
   const [indexs, setIndexs] = useState<IndexType | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [click, isclick] = useState<any>(null);
+  const [isWritingComment, setIsWritingComment] = useState(false);
   const [comments, setComments] = useState<CommentType | null>(null);
 
   const params = useParams();
@@ -152,7 +151,7 @@ export default function DetailPage() {
       });
       setComments({ comment: text });
       setCommentText("");
-      isclick(false);
+      setIsWritingComment(false);
     } catch (e) {
       console.error(e);
       alert("댓글 작성 실패");
@@ -165,132 +164,116 @@ export default function DetailPage() {
     </div>
   );
 
+  const backHref = `/${datas === "QNA" ? "qna" : datas === "activity" ? "act" : datas}`;
+
   return (
-    <div className=" flex flex-col gap-[2vh] items-center relative mt-[3vh] mb-[3vh] h-auto">
-      <div className="w-[80%] flex flex-col gap-[3vh]">
-        <p className="text-[3vh]"><Link href={`/${datas === "QNA" ? "qna" : datas === "activity" ? "act" : datas}`}>
-          {name}
-        </Link>
-        </p>
-        <hr className="border-[#CCCCCC] border-[1px] rounded-[5px]" />
-      </div>
+    <div className="flex flex-col items-center px-4 py-8 md:py-10">
+      <div className="flex w-full max-w-5xl flex-col gap-6">
+        <div className="space-y-2">
+          <p className="text-lg font-semibold text-orange-500">
+            <Link href={backHref}>{name || "목록"}</Link>
+          </p>
+          <hr className="border-[#CCCCCC] border-[1px] rounded-[5px]" />
+        </div>
 
-      <div className='w-[140vh]'>
         {name === '활동' ? (
-
-          <div>
-            <div className='flex flex-row gap-[10vh]'>
-
-
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
               {item.image && (
-                <div className='flex flex-col items-start w-[60vh]'>
-                  <div className="w-[50vh] h-[50vh] overflow-hidden rounded-xl">
+                <div className="w-full lg:w-2/5">
+                  <div className="aspect-square w-full overflow-hidden rounded-xl bg-gray-50">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={item.image} alt="이미지" className="w-full h-full object-cover" />
+                    <img src={item.image} alt="이미지" className="h-full w-full object-cover" />
                   </div>
                 </div>
               )}
 
-              <div className="flex flex-col w-[80vh]">
-                <h1 className='text-2xl font-bold mb-2'>{item.title}</h1>
-                <p className='text-sm text-gray-500 mb-6'>{formatDate(item.createdAt)}</p>
+              <div className="flex flex-1 flex-col">
+                <h1 className="text-2xl font-bold">{item.title}</h1>
+                <p className="mt-1 text-sm text-gray-500">{formatDate(item.createdAt)}</p>
 
-                <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
-                <div
-                  className="w-full max-w-full break-all p-[10px_14px] text-base flex flex-wrap h-full overflow-y-scroll mb-5 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent"
-                >
+                <hr className="my-4 border-[#EBEBEB]" />
+                <div className="rounded-xl border border-[#EAEAEA] bg-white p-4 text-base leading-relaxed">
                   {makeDocument(item.content)}
                 </div>
-
               </div>
             </div>
-
-            <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] my-10 w-full" />
           </div>
         ) : (
-
-          <div className='flex flex-col w-full'>
-            <h1 className='text-2xl font-bold mb-2'>{name === 'QnA' ? 'Q. ' : ''}{item.title}</h1>
-            <p className='text-sm text-gray-500 mb-4'>{formatDate(item.createdAt)}</p>
-            <div className='flex flex-col gap-[20vh]'>
-              <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mb-6" />
-              <div className='flex flex-col gap-[40vh]'>
-                <div
-                  className="w-full max-w-full break-all p-[10px_14px] text-base flex flex-wrap h-full"
-                >
-                  {makeDocument(item.content)}
-                </div>
-                <div>
-                  {(name === 'QnA' || datas === 'QNA') && (comments?.comment || role === 'ROLE_ADMIN' || role === 'ADMIN') && (
-                    <div className="border rounded-xl border-[#EAEAEA] p-4 -mt-[10vh] flex flex-col">
-                      {comments?.comment ? (
-                        <div className="p-2 flex flex-row gap-[2vh]">
-                          <div className='bg-[#FFD19C] w-[6vh] h-[6vh] rounded-[3vh] flex justify-center items-center '>
-                            <div className='bg-[#FF961F] w-[6vh] h-[6vh] rounded-[10vh] flex justify-center items-center'>
-                              <p className='text-[2vh] text-[#FFFFFF]'>A</p>
-                            </div>
-                          </div>
-                          {comments.comment}
-                        </div>
-                      ) : click ? (
-                        <div>
-                          <textarea
-                            className="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none"
-                            placeholder="답변을 입력하세요."
-                            value={commentText}
-                            onChange={(e) => setCommentText(e.target.value)}
-                          />
-                          <div className="flex justify-end">
-                            <button
-                              className="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-md flex items-center gap-2 transition"
-                              onClick={() => comment(commentText)}
-                            >
-                              댓글 올리기
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex justify-center">
-                          <button
-                            className="bg-orange-400 hover:bg-orange-500 text-white font-semibold px-5 py-2 rounded-md flex items-center gap-2 transition m-[5vh]"
-                            onClick={() => isclick(!click)}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
-                              viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-5-9l5 5M13 7l6 6" />
-                            </svg>
-                            답변 작성
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                </div>
-
-
-
-                <hr className="border-[#EBEBEB] border-[1px] rounded-[5px] mt-[-35vh]" />
-              </div>
-
+          <div className="flex flex-col gap-6">
+            <div className="space-y-1">
+              <h1 className="text-2xl font-bold break-words">{name === 'QnA' ? 'Q. ' : ''}{item.title}</h1>
+              <p className="text-sm text-gray-500">{formatDate(item.createdAt)}</p>
             </div>
+            <div className="rounded-xl border border-[#EAEAEA] bg-white p-4 text-base leading-relaxed">
+              {makeDocument(item.content)}
+            </div>
+            {(name === 'QnA' || datas === 'QNA') && (comments?.comment || role === 'ROLE_ADMIN' || role === 'ADMIN') && (
+              <div className="flex flex-col gap-4 rounded-xl border border-[#EAEAEA] bg-white p-4">
+                {comments?.comment ? (
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FFD19C]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FF961F] text-sm font-semibold text-white">
+                        A
+                      </div>
+                    </div>
+                    <p className="text-sm leading-relaxed text-gray-800">{comments.comment}</p>
+                  </div>
+                ) : isWritingComment ? (
+                  <>
+                    <textarea
+                      className="h-32 w-full resize-none rounded-lg border border-gray-300 p-3 text-sm focus:outline-none"
+                      placeholder="답변을 입력하세요."
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                    />
+                    <div className="flex justify-end gap-2">
+                      <button
+                        className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700"
+                        onClick={() => setIsWritingComment(false)}
+                      >
+                        취소
+                      </button>
+                      <button
+                        className="rounded-md bg-orange-400 px-5 py-2 text-sm font-semibold text-white transition hover:bg-orange-500"
+                        onClick={() => comment(commentText)}
+                      >
+                        댓글 올리기
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex justify-center">
+                    <button
+                      className="m-2 rounded-md bg-orange-400 px-5 py-2 text-sm font-semibold text-white transition hover:bg-orange-500"
+                      onClick={() => setIsWritingComment(true)}
+                    >
+                      답변 작성
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
-
       </div>
-      <div className='flex flex-row gap-[100vh]'>
-        {indexs?.prevId && (
-          <Link href={`/${datas}/${indexs.prevId}`} className="mr-4">
+
+      <div className="mt-8 flex w-full max-w-5xl flex-col gap-3 border-t border-[#EAEAEA] pt-4 md:mt-10 md:flex-row md:items-center md:justify-between">
+        {indexs?.prevId ? (
+          <Link href={`/${datas}/${indexs.prevId}`} className="text-sm text-gray-700 hover:text-orange-500">
             이전글 - {indexs.prevTitle}
           </Link>
+        ) : (
+          <span className="text-sm text-gray-400">이전글이 없습니다</span>
         )}
-        {indexs?.nextId && (
-          <Link href={`/${datas}/${indexs.nextId}`}>
+        {indexs?.nextId ? (
+          <Link href={`/${datas}/${indexs.nextId}`} className="text-sm text-gray-700 hover:text-orange-500">
             다음글 - {indexs.nextTitle}
           </Link>
+        ) : (
+          <span className="text-sm text-gray-400">다음글이 없습니다</span>
         )}
       </div>
-
     </div>
   );
 }
