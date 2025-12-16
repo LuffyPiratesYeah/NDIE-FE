@@ -103,8 +103,8 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="w-full max-w-sm text-center space-y-6">
-        <div className="flex justify-center">
-          <Image src={Logo} alt="Logo" width={90} height={90} />
+        <div className="flex justify-center -translate-y-1">
+          <Image src={Logo} alt="Logo" width={250} height={150} />
         </div>
 
         <button
