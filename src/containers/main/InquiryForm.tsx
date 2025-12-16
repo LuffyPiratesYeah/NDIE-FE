@@ -71,11 +71,11 @@ export default function InquiryForm() {
   return (
     // 전체 컨테이너 스타일 변경
     // 이미지에 맞춰 배경색 제거, 중앙 정렬, 상단 패딩 추가
-    <div className="absolute left-0 w-full h-full flex flex-col items-center bg-white px-40">
+    <div className="absolute left-0 w-full h-full flex flex-col items-center bg-white px-4 md:px-40">
       <div className="w-full h-full px-8 py-12"> {/* 내부 컨테이너 */}
         <h1 className="text-4xl font-bold mb-16 text-gray-800">문의하기</h1> {/* 제목 스타일 */}
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-x-20 gap-y-12 w-full">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-0 md:gap-x-20 gap-y-12 w-full">
           {/* 왼쪽 섹션: 이름, 단체 또는 기관명, 이메일 */}
           <div className="flex flex-col gap-10"> {/* 섹션 간격 조정 */}
             <div>
@@ -171,7 +171,7 @@ export default function InquiryForm() {
           </div>
 
           {/* 발송 버튼 (폼의 전체 너비에 걸쳐 오른쪽 정렬) */}
-          <div className="col-span-2 flex justify-end"> {/* col-span-2로 폼 전체 너비 사용 */}
+          <div className="col-span-1 md:col-span-2 flex justify-end"> {/* col-span-2로 폼 전체 너비 사용 */}
             <button
               type="submit"
               className="px-8 py-3 bg-white text-orange-500 border border-orange-500 text-xl font-semibold rounded-md shadow-sm hover:bg-orange-500 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 flex items-center"

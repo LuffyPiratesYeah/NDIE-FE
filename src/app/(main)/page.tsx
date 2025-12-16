@@ -39,7 +39,7 @@ export default function Home() {
       try {
         const db = await getFirebaseDb();
         if (!db) return;
-        
+
         const { doc, getDoc } = await import("firebase/firestore");
         const docRef = doc(db, "siteConfig", "main");
         const docSnap = await getDoc(docRef);
@@ -58,22 +58,22 @@ export default function Home() {
   return (
     <div>
       <ContentContainer>
-        <Image src={Main} alt={"background"} className="absolute top-[-20px] z-0 left-0"/>
+        <Image src={Main} alt={"background"} className="absolute top-[-20px] z-0 left-0" />
         <HomeBanner />
       </ContentContainer>
       <NoticeContainer />
       <ContentContainer className="py-20 flex gap-4 flex-col">
-        <p className="text-[2rem] font-extrabold mb-4">
+        <p className="text-2xl md:text-[2rem] font-extrabold mb-4">
           <span style={{ color: theme.primaryColor }}>{intro.highlightWord}</span> 소개
         </p>
-        <Image src={A} alt="a" />
-        <p className="text-center font-semibold text-2xl whitespace-pre-line">
+        <Image src={A} alt="a" className="max-w-full h-auto" />
+        <p className="text-center font-semibold text-lg md:text-2xl whitespace-pre-line">
           {intro.description}
         </p>
-        <Image src={B} alt="b" className="ml-auto"/>
+        <Image src={B} alt="b" className="ml-auto max-w-full h-auto" />
       </ContentContainer>
       <ContentContainer>
-        <OrgChart/>
+        <OrgChart />
       </ContentContainer>
       <ContentContainer>
         <TimeLine />

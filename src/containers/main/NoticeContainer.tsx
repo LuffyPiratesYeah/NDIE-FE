@@ -13,7 +13,7 @@ export default function NoticeContainer() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [notices, setNotices] = useState<Notice[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
-  const baseStyle = "w-[7.5rem] flex items-center justify-center text-gray-500";
+  const baseStyle = "w-12 md:w-[7.5rem] flex items-center justify-center text-gray-500";
 
   useEffect(() => {
     const fetchNotices = async () => {
@@ -63,7 +63,7 @@ export default function NoticeContainer() {
       >
         ◀
       </button>
-      <div className="w-full h-full overflow-hidden px-[7.5rem]"> {/* 좌우 버튼 공간 확보 */}
+      <div className="w-full h-full overflow-hidden px-12 md:px-[7.5rem]"> {/* 좌우 버튼 공간 확보 */}
         <div
           className="flex h-full transition-transform duration-300 ease-in-out"
           style={{
